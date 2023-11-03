@@ -1,5 +1,5 @@
 package br.com.pedido.Dto;
 
-public class Enderco {
+public class Endereco {
 
 }
