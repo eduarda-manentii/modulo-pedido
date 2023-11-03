@@ -101,5 +101,4 @@ public class Pedido {
 	public Pedido() {
 		 this.status = Status.REALIZADO;
 	}
-	
 }
