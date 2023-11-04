@@ -1,6 +1,6 @@
 package br.com.pedido.entity.enums;
 
-public enum Entrega {
+public enum Retirada {
 	RETIRADA,
 	DELIVERY
 }
