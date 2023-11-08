@@ -1,6 +1,7 @@
 package br.com.pedido.service;
 
 import java.awt.print.Pageable;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +26,10 @@ public interface PedidoService {
 			@NotNull(message = "O status para a atualização é obrigatorio")
 			Status status);
 	
+	public List<Pedido> listarPedidosPor(
+			@NotNull(message = "O status é obrigatorio")
+			Status status);
+	
 	public Page<Pedido> listarPor(
 			@NotNull(message = "O id do restaurante é obrigatório")
 			@Positive(message = "O id do restaurante é obrigatório")
@@ -33,8 +38,7 @@ public interface PedidoService {
 			Status status,
 			@NotNull(message = "A opção de retirada deve ser informada")
 			Retirada retirada,
-			Pageable paginacao
-			);
+			Pageable paginacao);
 	
 	public Pedido buscarPor(
 			@NotNull(message = "O id para busca é obrigatório")
