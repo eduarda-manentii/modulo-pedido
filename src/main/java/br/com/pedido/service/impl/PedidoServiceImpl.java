@@ -1,4 +1,4 @@
-package br.com.pedido.service.imp;
+package br.com.pedido.service.impl;
 
 import java.util.List;
 
@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
 
+import br.com.pedido.Dto.NovoPedido;
+import br.com.pedido.entity.OpcaoDoPedido;
 import br.com.pedido.entity.Pedido;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
+import br.com.pedido.repository.OpcoesDoPedidoRepository;
 import br.com.pedido.repository.PedidosRepository;
 import br.com.pedido.service.PedidoService;
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -21,11 +25,29 @@ public class PedidoServiceImpl implements PedidoService {
 	@Autowired
 	private PedidosRepository repository;
 	
-	@Override
-	public Pedido salvar(Pedido pedido) {
-		Preconditions.checkNotNull(pedido, "O pedido é obrigatório");
-		Pedido pedidoSalvo = repository.save(pedido);
-		return pedidoSalvo;
+	@Autowired
+	private OpcoesDoPedidoRepository opcaoRepository;
+	
+	public Pedido salvar(NovoPedido novoPedido) {
+		Pedido pedido = new Pedido();
+	    pedido.setRetirada(pedido.getRetirada());
+	    pedido.setPagamento(pedido.getPagamento());
+	    pedido.setStatus(pedido.getStatus());
+	    pedido.setIdCliente(pedido.getCliente().getId());
+	    pedido.setIdCupom(pedido.getCupom().getId());
+	    pedido.setIdEndereco(pedido.getEnderco().getId());
+	    pedido.setIdRestaurante(pedido.getEnderco().getId());
+	    pedido.setValorDesconto(pedido.getValorDesconto());
+	    pedido.setValorFrete(pedido.getValorFrete());
+	    pedido.setValorItens(pedido.getValorItens());
+	    pedido.setValorTotal(pedido.getValorTotal());
+	    Pedido pedidoSalvo = repository.save(pedido);
+
+	    for (OpcaoDoPedido opcao : pedido.getOpcoes()) {
+	        opcao.setPedido(pedidoSalvo);
+	        opcaoRepository.save(opcao);
+	    }
+	    return repository.buscarPor(pedidoSalvo.getId());
 	}
 
 	@Override
@@ -54,6 +76,12 @@ public class PedidoServiceImpl implements PedidoService {
 	@Override
 	public List<Pedido> listarPedidosPor(Status status) {
 		return repository.listarPedidosPor(status);
+	}
+
+	@Override
+	public Pedido salvar(@NotNull(message = "O pedido é obrigatório") Pedido pedido) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
