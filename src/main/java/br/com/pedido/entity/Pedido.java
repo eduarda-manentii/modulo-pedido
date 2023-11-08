@@ -110,9 +110,11 @@ public class Pedido {
 	@NotNull(message = "A data é obrigatória.")
 	private LocalDate data;
 	
+	
 	@OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, 
-			cascade = CascadeType.ALL, orphanRemoval = true)
+            cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OpcaoDoPedido> opcoes;
+
 	
 	@Transient
 	private List<NovaOpcaoDoPedido> novasOpcoes;

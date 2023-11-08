@@ -52,5 +52,4 @@ public class OpcaoDoPedido {
 	@NotNull(message = "A quantidade de item não pode ser nula.")
 	private Integer qtdeItens;
 	
-
 }
