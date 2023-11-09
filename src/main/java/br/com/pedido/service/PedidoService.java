@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 
+import br.com.pedido.Dto.NovoPedido;
 import br.com.pedido.entity.Pedido;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
@@ -17,7 +18,7 @@ public interface PedidoService {
 
 	public Pedido salvar(
 			@NotNull(message = "O pedido é obrigatório")
-			Pedido pedido);
+			NovoPedido novoPedido);
 	
 	public void atualizarStatusPor(
 			@NotNull(message = "O id é obrigatório")

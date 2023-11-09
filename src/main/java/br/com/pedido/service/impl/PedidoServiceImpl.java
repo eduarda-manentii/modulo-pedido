@@ -1,5 +1,6 @@
 package br.com.pedido.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
 
+import br.com.pedido.Dto.NovaOpcaoDoPedido;
 import br.com.pedido.Dto.NovoPedido;
 import br.com.pedido.entity.OpcaoDoPedido;
 import br.com.pedido.entity.Pedido;
+import br.com.pedido.entity.composite.OpcaoDoPedidoId;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
-import br.com.pedido.repository.OpcoesDoPedidoRepository;
 import br.com.pedido.repository.PedidosRepository;
 import br.com.pedido.service.PedidoService;
-import jakarta.validation.constraints.NotNull;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -25,28 +26,40 @@ public class PedidoServiceImpl implements PedidoService {
 	@Autowired
 	private PedidosRepository repository;
 	
-	@Autowired
-	private OpcoesDoPedidoRepository opcaoRepository;
-	
+	@Override
 	public Pedido salvar(NovoPedido novoPedido) {
 		Pedido pedido = new Pedido();
-	    pedido.setRetirada(pedido.getRetirada());
-	    pedido.setPagamento(pedido.getPagamento());
-	    pedido.setStatus(pedido.getStatus());
-	    pedido.setIdCliente(pedido.getCliente().getId());
-	    pedido.setIdCupom(pedido.getCupom().getId());
-	    pedido.setIdEndereco(pedido.getEnderco().getId());
-	    pedido.setIdRestaurante(pedido.getEnderco().getId());
-	    pedido.setValorDesconto(pedido.getValorDesconto());
-	    pedido.setValorFrete(pedido.getValorFrete());
-	    pedido.setValorItens(pedido.getValorItens());
-	    pedido.setValorTotal(pedido.getValorTotal());
+	    pedido.setRetirada(novoPedido.getRetirada());
+	    pedido.setPagamento(novoPedido.getPagamento());
+	    pedido.setStatus(novoPedido.getStatus());
+	    pedido.setIdCliente(novoPedido.getIdCliente());
+	    pedido.setIdCupom(novoPedido.getIdCupom());
+	    pedido.setIdEndereco(novoPedido.getIdEndereco());
+	    pedido.setIdRestaurante(novoPedido.getIdRestaurante());
+	    pedido.setValorDesconto(novoPedido.getValorDesconto());
+	    pedido.setValorFrete(novoPedido.getValorFrete());
+	    pedido.setValorItens(novoPedido.getValorItens());
+	    pedido.setValorTotal(novoPedido.getValorTotal());
+	    pedido.setData(novoPedido.getData());
 	    Pedido pedidoSalvo = repository.save(pedido);
 
-	    for (OpcaoDoPedido opcao : pedido.getOpcoes()) {
-	        opcao.setPedido(pedidoSalvo);
-	        opcaoRepository.save(opcao);
+	    for (NovaOpcaoDoPedido novaOpcao : novoPedido.getOpcoes()) {
+	    	OpcaoDoPedidoId id = new OpcaoDoPedidoId();
+			id.setIdDaOpcao(novaOpcao.getIdDaOpcao());
+			id.setIdDoPedido(pedidoSalvo.getId());	
+			OpcaoDoPedido opcaoDoPedido = new OpcaoDoPedido();
+			opcaoDoPedido.setId(id);
+			opcaoDoPedido.setPedido(pedidoSalvo);
+			opcaoDoPedido.setQtdeItens(novaOpcao.getQtdeItens());
+			opcaoDoPedido.setValorItem(novaOpcao.getValorItem());
+			BigDecimal valor = new BigDecimal(10.00);
+			opcaoDoPedido.setValorItem(valor);
+			BigDecimal subTotal = valor.multiply(new BigDecimal(novaOpcao.getQtdeItens()));
+			opcaoDoPedido.setSubtotal(subTotal);
+			
+	        pedidoSalvo.getOpcoes().add(opcaoDoPedido);
 	    }
+	    this.repository.save(pedidoSalvo);
 	    return repository.buscarPor(pedidoSalvo.getId());
 	}
 
@@ -76,12 +89,6 @@ public class PedidoServiceImpl implements PedidoService {
 	@Override
 	public List<Pedido> listarPedidosPor(Status status) {
 		return repository.listarPedidosPor(status);
-	}
-
-	@Override
-	public Pedido salvar(@NotNull(message = "O pedido é obrigatório") Pedido pedido) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -1,26 +1,32 @@
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/Dto/Frete.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/Dto/Restaurante.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/repository/OpcoesDoPedidoRepository.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/IntegracaoException.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/Dto/NovaOpcaoDoPedido.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/BusinessException.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/integration/processor/ErrorProcessor.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/handler/AcessoNaoAutorizadoHandler.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/handler/ErrorConverter.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/entity/enums/Status.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/entity/Pedido.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/RegistroNaoEncontradoException.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/entity/enums/Pagamento.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/entity/enums/Retirada.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/handler/HandlerErrorDefault.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/InitApp.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/Dto/Endereco.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/Dto/Cupom.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/AutorizacaoException.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/entity/composite/OpcaoDoPedidoId.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/ErroDaApi.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/entity/OpcaoDoPedido.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/Dto/Categoria.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/exception/ConverterException.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/Dto/Cliente.java
-/home/eduarda/Área de Trabalho/pedido/src/main/java/br/com/pedido/repository/PedidosRepository.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\handler\ErrorConverter.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\entity\Pedido.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\entity\enums\Pagamento.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\entity\enums\Status.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\service\PedidoService.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\integration\processor\ErrorProcessor.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\service\OpcaoDoPedidoService.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\service\proxy\OpcaoDoPedidoServiceProxy.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\entity\composite\OpcaoDoPedidoId.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Frete.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\repository\PedidosRepository.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Cliente.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\RegistroNaoEncontradoException.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\service\proxy\PedidoServiceProxy.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\service\impl\PedidoServiceImpl.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\entity\OpcaoDoPedido.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\InitApp.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\IntegracaoException.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\entity\enums\Retirada.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\NovoPedido.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\ErroDaApi.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\repository\OpcoesDoPedidoRepository.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Categoria.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Cupom.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\NovaOpcaoDoPedido.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Restaurante.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\controller\PedidoController.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Endereco.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\ConverterException.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\BusinessException.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\service\impl\OpcaoDoPedidoServiceImpl.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\AutorizacaoException.java

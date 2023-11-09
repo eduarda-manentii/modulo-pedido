@@ -17,5 +17,5 @@ public class OpcaoDoPedidoId {
 	
 	@Column(name = "id_opcao")
 	private Integer idDaOpcao;
-	
+
 }
