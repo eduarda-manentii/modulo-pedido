@@ -46,7 +46,9 @@ public class FromOpcao extends RouteBuilder implements Serializable {
 	            	 String responseJson = exchange.getIn().getBody(String.class);
 	                 JSONObject jsonObject = new JSONObject(responseJson);
 	                 Integer idDaOpcao = jsonObject.getInt("idDaOpcao");
+	                 Integer idDoCardapio = jsonObject.getInt("idDoCardapio");
 	                 exchange.setProperty("idDaOpcao", idDaOpcao);
+	                 exchange.setProperty("idDoCardapio", idDoCardapio);
 	                
 	                JSONObject requestBody = new JSONObject();
 	                requestBody.put("login", login);
@@ -66,23 +68,14 @@ public class FromOpcao extends RouteBuilder implements Serializable {
 			})
 	        .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 	        .setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
-	        .setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))
-	        .process(new Processor() {
-	            @Override
-	            public void process(Exchange exchange) throws Exception {
-	                String jsonBody = exchange.getMessage().getBody(String.class);
-	                JSONObject jsonObject = new JSONObject(jsonBody);
-	                exchange.getMessage().setBody(jsonObject);
-	            }
-	        })
-	        .toD(urlDeEnvio + "/opcoes/id/${exchangeProperty.idDaOpcao}")
+	        .setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))	        
+	        .toD(urlDeEnvio + "/opcoes-cardapio/cardapio/${exchangeProperty.idDoCardapio}/opcao/${exchangeProperty.idDaOpcao}")
 	        .process(new Processor() {
 				
 				@Override
-				public void process(Exchange exchange) throws Exception {
-	                exchange.getProperty("idDaOpcao");
-	                String responseJson = exchange.getIn().getBody(String.class);
-	                JSONObject jsonObject = new JSONObject(responseJson);
+				public void process(Exchange exchange) throws Exception {					
+					String responseJson = exchange.getIn().getBody(String.class);
+					JSONObject jsonObject = new JSONObject(responseJson);
 	                exchange.getMessage().setBody(jsonObject.toString());
 				}
 			})

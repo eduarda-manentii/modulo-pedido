@@ -86,7 +86,6 @@ public class Pedido {
 	private Cliente cliente;
 	
 	@Column(name = "id_cupom")
-	@NotNull(message = "O cupom é obrigatório.")
 	private Integer idCupom;
 	
 	@Transient
@@ -97,7 +96,7 @@ public class Pedido {
 	private Integer idEndereco;
 	
 	@Transient
-	private Endereco enderco;
+	private Endereco endereco;
 	
 	@Column(name = "id_restaurante")
 	@NotNull(message = "O restaurante é obrigatório.")

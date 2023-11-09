@@ -1,6 +1,6 @@
 package br.com.pedido.service.proxy;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.camel.ProducerTemplate;
@@ -34,19 +34,20 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Override
 	public Pedido salvar(NovoPedido novoPedido) {
-	    List<NovaOpcaoDoPedido> novasOpcoes = new ArrayList<>();
-
-	    for (int i = 0; i < novoPedido.getOpcoes().size(); i++) {
-	        Integer idDaOpcao = novoPedido.getOpcoes().get(i).getIdDaOpcao();
+	    Integer idDoCardapio = novoPedido.getIdDoCardapio();
+	    
+	    for (NovaOpcaoDoPedido nop : novoPedido.getOpcoes()) {
+	        Integer idDaOpcao = nop.getIdDaOpcao();
 	        JSONObject request = new JSONObject();
 	        request.put("idDaOpcao", idDaOpcao);
-	        JSONObject opcao = fromOpcao.requestBody("direct:receberOpcao", request, JSONObject.class);
-	        NovaOpcaoDoPedido opcaoDoPedido = new NovaOpcaoDoPedido();
-	        System.out.println(opcao.getString("nome"));
-	        novasOpcoes.add(opcaoDoPedido);
+	        request.put("idDoCardapio", idDoCardapio);
+	        JSONObject opcaoDoCardapioEncontrada = fromOpcao.requestBody(
+	        		"direct:receberOpcao", request, JSONObject.class);
+	        nop.setValorItem(opcaoDoCardapioEncontrada.getBigDecimal("preco"));
+	        BigDecimal qtde = new BigDecimal(nop.getQtdeItens());
+	        BigDecimal subtotal = nop.getValorItem().multiply(qtde);
+	        nop.setSubtotal(subtotal);
 	    }
-
-	    novoPedido.getOpcoes().addAll(novasOpcoes);
 	    return service.salvar(novoPedido);
 	}
 

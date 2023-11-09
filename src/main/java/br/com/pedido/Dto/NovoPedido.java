@@ -62,6 +62,9 @@ public class NovoPedido {
 	@NotNull(message = "O restaurante é obrigatório.")
 	private Integer idRestaurante;
 	
+	@NotNull(message = "O id do cardápio é obrigatório.")
+	private Integer idDoCardapio;
+	
 	@NotNull(message = "A data é obrigatória.")
 	private LocalDate data;
 	
