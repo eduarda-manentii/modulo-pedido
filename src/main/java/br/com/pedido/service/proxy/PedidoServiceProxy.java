@@ -1,10 +1,8 @@
 package br.com.pedido.service.proxy;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +26,8 @@ public class PedidoServiceProxy implements PedidoService {
 	@Qualifier("pedidoServiceImpl")
 	private PedidoService service;
 	
-	@Value("${https://cardapios-mktplace-api-production.up.railway.app}")
-	private String enderecoOpcao = "https://cardapios-mktplace-api-production.up.railway.app";
+	@Value("${opcao.url}")
+	private String enderecoOpcao = "opcao.url";
 
 	@Autowired
 	private ProducerTemplate fromOpcao;
@@ -39,10 +37,12 @@ public class PedidoServiceProxy implements PedidoService {
 	    List<NovaOpcaoDoPedido> novasOpcoes = new ArrayList<>();
 
 	    for (int i = 0; i < novoPedido.getOpcoes().size(); i++) {
-	        JSONObject opcao = this.fromOpcao.requestBody("direct:receberOpcao", null, JSONObject.class);
+	        Integer idDaOpcao = novoPedido.getOpcoes().get(i).getIdDaOpcao();
+	        JSONObject request = new JSONObject();
+	        request.put("idDaOpcao", idDaOpcao);
+	        JSONObject opcao = fromOpcao.requestBody("direct:receberOpcao", request, JSONObject.class);
 	        NovaOpcaoDoPedido opcaoDoPedido = new NovaOpcaoDoPedido();
 	        System.out.println(opcao.getString("nome"));
-	        //opcaoDoPedido.setValorItem(opcao.getBigDecimal(""));
 	        novasOpcoes.add(opcaoDoPedido);
 	    }
 
