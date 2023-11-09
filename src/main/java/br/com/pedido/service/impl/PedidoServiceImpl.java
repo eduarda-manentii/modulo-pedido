@@ -51,9 +51,7 @@ public class PedidoServiceImpl implements PedidoService {
 			opcaoDoPedido.setId(id);
 			opcaoDoPedido.setPedido(pedidoSalvo);
 			opcaoDoPedido.setQtdeItens(novaOpcao.getQtdeItens());
-			opcaoDoPedido.setValorItem(novaOpcao.getValorItem());
-			BigDecimal valor = new BigDecimal(10.00);
-			opcaoDoPedido.setValorItem(valor);
+			BigDecimal valor = new BigDecimal(0);
 			BigDecimal subTotal = valor.multiply(new BigDecimal(novaOpcao.getQtdeItens()));
 			opcaoDoPedido.setSubtotal(subTotal);
 			
