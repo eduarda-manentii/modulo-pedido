@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -26,5 +27,8 @@ public class NovaOpcaoDoPedido {
 	@Positive(message = "A quantidade de itens deve ser positiva.")
 	@NotNull(message = "A quantidade de item não pode ser nula.")
 	private Integer qtdeItens;
+	
+	@NotBlank(message = "O nome é obrigatório")
+	private String nome;
 	
 }

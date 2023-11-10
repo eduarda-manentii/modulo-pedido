@@ -114,7 +114,6 @@ public class Pedido {
             cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OpcaoDoPedido> opcoes;
 
-	
 	@Transient
 	private List<NovaOpcaoDoPedido> novasOpcoes;
 	
