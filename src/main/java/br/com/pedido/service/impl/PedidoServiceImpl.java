@@ -36,13 +36,23 @@ public class PedidoServiceImpl implements PedidoService {
 	    pedido.setIdCupom(novoPedido.getIdCupom());
 	    pedido.setIdEndereco(novoPedido.getIdEndereco());
 	    pedido.setIdRestaurante(novoPedido.getIdRestaurante());
-	    pedido.setValorDesconto(novoPedido.getValorDesconto());
-	    pedido.setValorFrete(novoPedido.getValorFrete());
-	    pedido.setValorItens(novoPedido.getValorItens());
-	    pedido.setValorTotal(novoPedido.getValorTotal());
-	    pedido.setData(novoPedido.getData());
-	    Pedido pedidoSalvo = repository.save(pedido);
 
+	    BigDecimal desconto = novoPedido.getValorDesconto();
+	    pedido.setValorDesconto(desconto);
+	    
+	    BigDecimal frete = novoPedido.getValorFrete();
+	    pedido.setValorFrete(frete);
+	    
+	    BigDecimal valorItens = novoPedido.getValorItens();
+	    pedido.setValorItens(valorItens);
+	    
+	    BigDecimal subtotal = valorItens.add(frete).subtract(desconto);
+	    pedido.setValorTotal(subtotal);
+	    
+	    pedido.setData(novoPedido.getData());
+	    
+	    Pedido pedidoSalvo = repository.save(pedido);
+	    this.validarDuplicidadeEm(novoPedido.getOpcoes());
 	    for (NovaOpcaoDoPedido novaOpcao : novoPedido.getOpcoes()) {
 	    	OpcaoDoPedidoId id = new OpcaoDoPedidoId();
 			id.setIdDaOpcao(novaOpcao.getIdDaOpcao());
@@ -57,8 +67,9 @@ public class PedidoServiceImpl implements PedidoService {
 			opcaoDoPedido.setSubtotal(subTotal);
 			
 	        pedidoSalvo.getOpcoes().add(opcaoDoPedido);
+	        this.repository.saveAndFlush(pedidoSalvo);
 	    }
-	    this.repository.save(pedidoSalvo);
+	    System.out.println(pedidoSalvo);
 	    return repository.buscarPor(pedidoSalvo.getId());
 	}
 
@@ -88,6 +99,18 @@ public class PedidoServiceImpl implements PedidoService {
 	@Override
 	public List<Pedido> listarPedidosPor(Status status) {
 		return repository.listarPedidosPor(status);
+	}
+	
+	private void validarDuplicidadeEm(List<NovaOpcaoDoPedido> opcoesDoPedido) {
+		for (NovaOpcaoDoPedido novaOpcao : opcoesDoPedido) {
+			int qtdeDeOcorrencias = 0;
+			for (NovaOpcaoDoPedido outraOpcao : opcoesDoPedido) {
+				if (novaOpcao.getIdDaOpcao().equals(outraOpcao.getIdDaOpcao())) {
+					qtdeDeOcorrencias++;
+				}
+			}
+			Preconditions.checkArgument(qtdeDeOcorrencias == 1, "A opção '" + novaOpcao.getIdDaOpcao() + "' está duplicado no pedido.");
+		}
 	}
 
 }

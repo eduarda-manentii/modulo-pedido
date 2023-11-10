@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -39,12 +38,10 @@ public class OpcaoDoPedido {
 	
 	@Column(name = "valor_item")
 	@DecimalMin(message = "O preço não pode ser inferior a R$0.01", value = "0.0", inclusive = false)
-    @Digits(message = "O preço deve possuir o formato 'NNNNNNNNN.NN'", integer = 9, fraction = 2)
 	private BigDecimal valorItem;
 	
 	@Column(name = "subtotal")
 	@DecimalMin(message = "O subtotal não pode ser inferior a R$0.01", value = "0.0", inclusive = false)
-    @Digits(message = "O subtotal deve possuir o formato 'NNNNNNNNN.NN'", integer = 9, fraction = 2)
 	private BigDecimal subtotal;
 	
 	@Column(name = "qtde_itens")
