@@ -27,7 +27,7 @@ public class FromCupom extends RouteBuilder implements Serializable {
 	@Value("${cadastros.login}")
 	private String login;
 	
-	@Value("${cadastros.senha}")
+	@Value("${cadastros.password}")
 	private String senha;
 	
 	@Autowired
@@ -35,7 +35,7 @@ public class FromCupom extends RouteBuilder implements Serializable {
 
 	@Override
 	public void configure() throws Exception {
-	    from("direct:receberOpcao")
+	    from("direct:receberCupom")
 	        .doTry()
 	        .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
 	        .setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
@@ -45,7 +45,7 @@ public class FromCupom extends RouteBuilder implements Serializable {
 	            	 String responseJson = exchange.getIn().getBody(String.class);
 	                 JSONObject jsonObject = new JSONObject(responseJson);
 	                 Integer idDoCupom = jsonObject.getInt("idDoCupom");
-	                 exchange.setProperty("idDoCardapio", idDoCupom);
+	                 exchange.setProperty("idDoCupom", idDoCupom);
 	                
 	                JSONObject requestBody = new JSONObject();
 	                requestBody.put("email", login);
@@ -66,7 +66,7 @@ public class FromCupom extends RouteBuilder implements Serializable {
 	        .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 	        .setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 	        .setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))	        
-	        .toD(urlDeEnvio + "/cupom/${exchangeProperty.idDoCupom}")
+	        .toD(urlDeEnvio + "/cupons/id/${exchangeProperty.idDoCupom}")
 	        .process(new Processor() {
 				
 				@Override

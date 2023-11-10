@@ -18,16 +18,16 @@ public class FromOpcao extends RouteBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Value("${mkptlace.url}")
+	@Value("${mktplace.url}")
 	private String urlDeEnvio;
 	
-	@Value("${mkptlace.url.token}")
+	@Value("${mktplace.url.token}")
 	private String urlDeToken;
 	
-	@Value("${mkptlace.login}")
+	@Value("${mktplace.login}")
 	private String login;
 	
-	@Value("${mkptlace.password}")
+	@Value("${mktplace.password}")
 	private String senha;
 	
 	@Autowired

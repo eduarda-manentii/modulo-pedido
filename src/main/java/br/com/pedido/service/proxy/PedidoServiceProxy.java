@@ -63,7 +63,7 @@ public class PedidoServiceProxy implements PedidoService {
 		JSONObject cupomEncontrado = fromCupom.requestBody("direct:receberCupom", requestCupom, JSONObject.class);
 		Cupom cupom = new Cupom();
 		cupom.setId(cupomEncontrado.getInt("id"));
-		cupom.setValor(cupomEncontrado.getBigDecimal("valor"));
+		cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
 		cupom.setStatus(cupomEncontrado.getString("status"));
 		
 		return service.salvar(novoPedido);
