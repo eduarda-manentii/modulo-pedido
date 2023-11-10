@@ -20,6 +20,7 @@ C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pe
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\NovoPedido.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\ErroDaApi.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\repository\OpcoesDoPedidoRepository.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromOpcao.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Categoria.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Cupom.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\NovaOpcaoDoPedido.java
@@ -27,6 +28,7 @@ C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pe
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\controller\PedidoController.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\Dto\Endereco.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\ConverterException.java
+C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\controller\AuthController.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\BusinessException.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\service\impl\OpcaoDoPedidoServiceImpl.java
 C:\Users\eduarda_manenti\eclipse-workspace\modulo-pedido\src\main\java\br\com\pedido\exception\AutorizacaoException.java
