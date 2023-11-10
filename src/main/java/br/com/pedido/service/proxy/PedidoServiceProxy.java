@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.util.json.JsonObject;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +19,7 @@ import br.com.pedido.entity.Pedido;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
 import br.com.pedido.service.PedidoService;
+import br.com.pedido.Dto.Restaurante;
 
 @Service
 public class PedidoServiceProxy implements PedidoService {
@@ -31,6 +33,9 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Autowired
 	private ProducerTemplate fromOpcao;
+	
+	@Autowired
+	private ProducerTemplate fromRestaurante;
 
 	@Override
 	public Pedido salvar(NovoPedido novoPedido) {
@@ -68,7 +73,25 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Override
 	public Pedido buscarPor (Integer id) {
-		return service.buscarPor(id);
+		
+		Pedido pedido = service.buscarPor(id);
+		
+		JSONObject requestBody = new JSONObject();
+		requestBody.put("idRestaurante", pedido.getIdRestaurante());
+		
+		JSONObject restauranteJson = fromRestaurante.requestBody(
+				"direct:receberRestaurante", requestBody, JSONObject.class);
+		
+		Restaurante restaurante = new Restaurante();
+		restaurante.setId(restauranteJson.getInt("id"));
+		restaurante.setNome(restauranteJson.getString("nome"));
+		System.out.println(restaurante.getNome());
+		return pedido;
+		
 	}
+	
+	
+	
+	
 
 }

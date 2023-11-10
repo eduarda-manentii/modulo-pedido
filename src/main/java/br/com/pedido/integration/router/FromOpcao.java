@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import br.com.pedido.integration.processor.ErrorProcessor;
 
-
 @Component
 public class FromOpcao extends RouteBuilder implements Serializable {
 

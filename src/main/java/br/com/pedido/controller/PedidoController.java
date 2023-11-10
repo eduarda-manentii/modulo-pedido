@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.util.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pedido.Dto.NovoPedido;
+import br.com.pedido.Dto.Restaurante;
 import br.com.pedido.entity.Pedido;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
@@ -36,6 +39,43 @@ public class PedidoController {
 	@Autowired
 	@Qualifier("pedidoServiceProxy")
 	private PedidoService service;
+	
+	@Autowired
+	private ProducerTemplate fromRestaurante;
+
+
+	public Restaurante buscarRestaurante(Integer idRestaurante) {
+		
+		Restaurante restaurante = new Restaurante();
+		JsonObject request = new JsonObject();
+		request.put("idRestaurante", idRestaurante);
+		JsonObject restauranteEncontrado = fromRestaurante.requestBody(
+					"direct:receberRestaurante",
+					request,
+					JsonObject.class
+				);
+		
+		restaurante.setNome(restauranteEncontrado.getString("nome"));
+		restaurante.setId(restauranteEncontrado.getInteger("id"));
+		
+		
+		return restaurante;
+	}
+
+	private Map<String, Object> converter(Pedido pedido){		
+		Map<String, Object> pedidoMap = new HashMap<String, Object>();
+		pedidoMap.put("id", pedido.getId());
+		
+		Map<String, Object> restauranteMap = new HashMap<String, Object>();
+		restauranteMap.put("id", pedido.getRestaurante().getId());
+		restauranteMap.put("nome", pedido.getRestaurante().getNome());
+		pedidoMap.put("restaurante", restauranteMap);		
+		
+		pedidoMap.put("idCliente", pedido.getIdCliente());
+		
+		return pedidoMap;
+	
+	}
 	
 	
 	@Transactional
@@ -87,6 +127,18 @@ public class PedidoController {
 		pageMap.put("listagem", listagem);
 		return ResponseEntity.ok(pageMap);
 	}
+	
+	@GetMapping("/id/{id}")
+	public ResponseEntity<?> buscarPor(
+			@PathVariable("id") 
+			Integer id) {
+		Pedido pedidoEncontrado = service.buscarPor(id);		
+		
+		return ResponseEntity.ok(converter(pedidoEncontrado));
+		
+	}
+	
+
 	
 	
 }
