@@ -11,6 +11,7 @@ import br.com.pedido.entity.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -55,6 +56,9 @@ public class NovoPedido {
 	
 	@NotNull(message = "O cupom é obrigatório.")
 	private Integer idCupom;
+	
+	@Transient
+	private Cupom cupom;
 	
 	@NotNull(message = "O endereço é obrigatório.")
 	private Integer idEndereco;

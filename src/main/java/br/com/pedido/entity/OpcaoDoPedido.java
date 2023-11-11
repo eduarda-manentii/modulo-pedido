@@ -52,4 +52,12 @@ public class OpcaoDoPedido {
 	@NotNull(message = "A quantidade de item não pode ser nula.")
 	private Integer qtdeItens;
 	
+	@Column(name = "nome")
+	@NotNull(message = "O nome é obrigatório")
+	private String nome;
+	
+	@Column(name = "recomendado")
+	@NotNull(message = "A opção recomendada é obrigatória")
+	private String promocao;
+	
 }

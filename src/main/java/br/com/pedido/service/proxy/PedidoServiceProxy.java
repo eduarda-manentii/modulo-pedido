@@ -57,12 +57,11 @@ public class PedidoServiceProxy implements PedidoService {
 					JSONObject.class);
 			nop.setValorItem(opcaoDoCardapioEncontrada.getBigDecimal("preco"));
 			nop.setNome(opcaoDoCardapioEncontrada.getString("nome"));
+			nop.setPromocao(opcaoDoCardapioEncontrada.getString("recomendado"));
 			BigDecimal qtde = new BigDecimal(nop.getQtdeItens());
 			BigDecimal subtotal = nop.getValorItem().multiply(qtde);
 			nop.setSubtotal(subtotal);
 		}
-		
-		//TODO: implemntar a recuperação do valor do cupom
 		Integer idDoCupom = novoPedido.getIdCupom();
 		JSONObject requestCupom = new JSONObject();
 		requestCupom.put("idDoCupom", idDoCupom);
@@ -71,7 +70,7 @@ public class PedidoServiceProxy implements PedidoService {
 		cupom.setId(cupomEncontrado.getInt("id"));
 		cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
 		cupom.setStatus(cupomEncontrado.getString("status"));
-		
+		novoPedido.setCupom(cupom);
 		return service.salvar(novoPedido);
 	}
 
@@ -128,7 +127,6 @@ public class PedidoServiceProxy implements PedidoService {
 		pedido.setCupom(cupom);
 		
 		//RECUPERA O ENDERECO NO JSON
-		
 		JSONObject requestBodyEndereco = new JSONObject();
 		requestBodyEndereco.put("idEndereco", pedido.getIdEndereco());
 		JSONObject enderecoJson = fromEndereco.requestBody("direct:receberEndereco", requestBodyEndereco,

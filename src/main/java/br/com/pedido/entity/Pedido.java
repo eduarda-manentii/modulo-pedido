@@ -59,7 +59,7 @@ public class Pedido {
 	private Pagamento pagamento;
 	
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor total não pode ser inferior a 0.0")
-	@Digits(integer = 2, fraction = 2, message = "O valor total deve possuir o formato 'NN.NN'")
+	//@Digits(integer = 2, fraction = 2, message = "O valor total deve possuir o formato 'NN.NN'")
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	
@@ -108,7 +108,6 @@ public class Pedido {
 	@Column(name = "data")
 	@NotNull(message = "A data é obrigatória.")
 	private LocalDate data;
-	
 	
 	@OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, 
             cascade = CascadeType.ALL, orphanRemoval = true)

@@ -36,6 +36,7 @@ public class PedidoServiceImpl implements PedidoService {
 	    pedido.setIdCupom(novoPedido.getIdCupom());
 	    pedido.setIdEndereco(novoPedido.getIdEndereco());
 	    pedido.setIdRestaurante(novoPedido.getIdRestaurante());
+	    pedido.setCupom(novoPedido.getCupom());
 	    
 	    BigDecimal frete = novoPedido.getValorFrete();
 	    pedido.setValorFrete(frete);
@@ -64,6 +65,8 @@ public class PedidoServiceImpl implements PedidoService {
 			opcaoDoPedido.setValorItem(valor);
 			BigDecimal subTotal = valor.multiply(new BigDecimal(novaOpcao.getQtdeItens()));
 			opcaoDoPedido.setSubtotal(subTotal);
+			opcaoDoPedido.setNome(novaOpcao.getNome());
+			opcaoDoPedido.setPromocao(novaOpcao.getPromocao());
 			
 	        pedidoSalvo.getOpcoes().add(opcaoDoPedido);
 	    }

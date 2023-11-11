@@ -70,6 +70,7 @@ public class PedidoController {
 		pedidoMap.put("valor do frete", pedido.getValorFrete());
 		pedidoMap.put("valor dos itens", pedido.getValorItens());
 		pedidoMap.put("desconto", pedido.getValorDesconto());
+		pedidoMap.put("opcoes", pedido.getOpcoes());
 		
 		Map<String, Object> restauranteMap = new HashMap<String, Object>();
 		restauranteMap.put("id_restaurante", pedido.getRestaurante().getId());
@@ -87,7 +88,7 @@ public class PedidoController {
 		enderecoMap.put("estado", pedido.getEndereco().getEstado());
 		enderecoMap.put("cidade", pedido.getEndereco().getCidade());
 		enderecoMap.put("bairro", pedido.getEndereco().getBairro());
-		enderecoMap.put("numero", pedido.getEndereco().getNumero());
+		enderecoMap.put("numero", pedido.getEndereco().getNumero());;
 		enderecoMap.put("complemento", pedido.getEndereco().getComplemento());
 		pedidoMap.put("endereco", enderecoMap);
 		
@@ -100,13 +101,15 @@ public class PedidoController {
 		List<Map<String, Object>> opcoesMap = new ArrayList<Map<String, Object>>();
 		for (OpcaoDoPedido opcaoDoPedido : pedido.getOpcoes()) {
 				Map<String, Object> opcaoMap = new HashMap<String, Object>();
-				opcaoMap.put("id_opcao", opcaoDoPedido.getId());
+				opcaoMap.put("nome", opcaoDoPedido.getNome());
+				opcaoMap.put("promocao", opcaoDoPedido.getPromocao());
 				opcaoMap.put("qtde_itens", opcaoDoPedido.getQtdeItens());
 				opcaoMap.put("valor", opcaoDoPedido.getValorItem());
 				opcaoMap.put("subtotal", opcaoDoPedido.getSubtotal());
+				opcoesMap.add(opcaoMap);
 			}
 			
-			pedidoMap.put("opcoes", opcoesMap);
+		pedidoMap.put("opcoes", opcoesMap);
 		return pedidoMap;
 	}
 
