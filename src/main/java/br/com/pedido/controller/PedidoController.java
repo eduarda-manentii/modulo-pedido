@@ -60,8 +60,8 @@ public class PedidoController {
 
 	private Map<String, Object> converter(Pedido pedido) {
 		Map<String, Object> pedidoMap = new HashMap<String, Object>();
-		pedidoMap.put("id", pedido.getId());
-		pedidoMap.put("data", pedido.getData());
+		pedidoMap.put("id_pedido", pedido.getId());
+		pedidoMap.put("data_pedido", pedido.getData());
 		pedidoMap.put("pagamento", pedido.getPagamento());
 		pedidoMap.put("opcoes", pedido.getOpcoes());
 		pedidoMap.put("tipo de entrega", pedido.getRetirada());
@@ -72,17 +72,17 @@ public class PedidoController {
 		pedidoMap.put("desconto", pedido.getValorDesconto());
 		
 		Map<String, Object> restauranteMap = new HashMap<String, Object>();
-		restauranteMap.put("id", pedido.getRestaurante().getId());
+		restauranteMap.put("id_restaurante", pedido.getRestaurante().getId());
 		restauranteMap.put("nome", pedido.getRestaurante().getNome());
 		pedidoMap.put("restaurante", restauranteMap);
 
 		Map<String, Object> clienteMap = new HashMap<String, Object>();
-		clienteMap.put("id", pedido.getCliente().getId());
+		clienteMap.put("id_cliente", pedido.getCliente().getId());
 		clienteMap.put("nome", pedido.getCliente().getNome());
 		pedidoMap.put("cliente", clienteMap);
 		
 		Map<String, Object> enderecoMap = new HashMap<String, Object>();
-		enderecoMap.put("id", pedido.getEndereco().getId());
+		enderecoMap.put("id_endereco", pedido.getEndereco().getId());
 		enderecoMap.put("CEP", pedido.getEndereco().getCep());
 		enderecoMap.put("estado", pedido.getEndereco().getEstado());
 		enderecoMap.put("cidade", pedido.getEndereco().getCidade());
@@ -92,15 +92,15 @@ public class PedidoController {
 		pedidoMap.put("endereco", enderecoMap);
 		
 		Map<String, Object> cupomMap = new HashMap<String, Object>();
-		cupomMap.put("id", pedido.getCupom().getId());
+		cupomMap.put("id_cupom", pedido.getCupom().getId());
 		cupomMap.put("codigo", pedido.getCupom().getCodigo());
-		cupomMap.put("valor", pedido.getCupom().getValor());
+		cupomMap.put("valor", pedido.getCupom().getValor() + "%");
 		pedidoMap.put("cupom", cupomMap);
 		
 		List<Map<String, Object>> opcoesMap = new ArrayList<Map<String, Object>>();
 		for (OpcaoDoPedido opcaoDoPedido : pedido.getOpcoes()) {
 				Map<String, Object> opcaoMap = new HashMap<String, Object>();
-				opcaoMap.put("id", opcaoDoPedido.getId());
+				opcaoMap.put("id_opcao", opcaoDoPedido.getId());
 				opcaoMap.put("qtde_itens", opcaoDoPedido.getQtdeItens());
 				opcaoMap.put("valor", opcaoDoPedido.getValorItem());
 				opcaoMap.put("subtotal", opcaoDoPedido.getSubtotal());

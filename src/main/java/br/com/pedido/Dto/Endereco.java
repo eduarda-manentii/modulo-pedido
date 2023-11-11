@@ -22,6 +22,10 @@ public class Endereco {
 	@NotBlank(message = "O cep é obrigatório")
 	private String cep;
 	
+	@Size(max = 45, message = "O rua não deve conter mais de 45 caracteries")
+	@NotBlank(message = "A rua é obrigatória")
+	private String rua;
+	
 	@Size(max = 45, message = "A cidade não deve conter mais de 45 caracteries")
 	@NotBlank(message = "A cidade é obrigatória")
 	private String cidade;

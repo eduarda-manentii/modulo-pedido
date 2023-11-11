@@ -37,7 +37,13 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Autowired
 	private ProducerTemplate fromRestaurante;
+	
+	@Autowired
+	private ProducerTemplate fromCliente;
 
+	@Autowired
+	private ProducerTemplate fromEndereco;
+	
 	@Override
 	public Pedido salvar(NovoPedido novoPedido) {
 		Integer idDoCardapio = novoPedido.getIdDoCardapio();
@@ -88,7 +94,8 @@ public class PedidoServiceProxy implements PedidoService {
 	public Pedido buscarPor(Integer id) {
 
 		Pedido pedido = service.buscarPor(id);
-
+		
+		//RECUPERA O RESTAURANTE NO JSON
 		JSONObject requestBodyRestaurante = new JSONObject();
 		requestBodyRestaurante.put("idRestaurante", pedido.getIdRestaurante());
 		JSONObject restauranteJson = fromRestaurante.requestBody("direct:receberRestaurante", requestBodyRestaurante,
@@ -97,30 +104,46 @@ public class PedidoServiceProxy implements PedidoService {
 		restaurante.setId(restauranteJson.getInt("id"));
 		restaurante.setNome(restauranteJson.getString("nome"));
 		pedido.setRestaurante(restaurante);
-		
-		//TOD: esperar os endpoints dos amigos
+
+		//RECUPERA O CLIENTE NO JSON
+		JSONObject requestBodyCliente = new JSONObject();
+		requestBodyCliente.put("idCliente", pedido.getIdCliente());
+		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente,
+				JSONObject.class);
 		Cliente cliente = new Cliente();
-		cliente.setId(1);
-		cliente.setNome("Eduarda Manenti");
+		cliente.setId(clienteJson.getInt("id"));
+		cliente.setNome(clienteJson.getString("nome"));
 		pedido.setCliente(cliente);
 		
+		//RECUPERA O CUPOM NO JSON
+		JSONObject requestBodyCupom = new JSONObject();
+		requestBodyCupom.put("idDoCupom", pedido.getIdCupom());
+		JSONObject cupomJson = fromCupom.requestBody("direct:receberCupom", requestBodyCupom,
+				JSONObject.class);
 		Cupom cupom = new Cupom();
-		cupom.setId(1);
-		cupom.setCodigo("PRIMEIROCOMPRA20");
-		cupom.setStatus("ACEITO_PELO_RESTAURANTE");
-		BigDecimal valor = new BigDecimal(20);
-		cupom.setValor(valor);
+		cupom.setId(cupomJson.getInt("id"));
+		cupom.setCodigo(cupomJson.getString("codigo"));
+		cupom.setStatus(cupomJson.getString("status"));
+		cupom.setValor(cupomJson.getBigDecimal("percentualDeDesconto"));
 		pedido.setCupom(cupom);
 		
+		//RECUPERA O ENDERECO NO JSON
+		
+		JSONObject requestBodyEndereco = new JSONObject();
+		requestBodyEndereco.put("idEndereco", pedido.getIdEndereco());
+		JSONObject enderecoJson = fromEndereco.requestBody("direct:receberEndereco", requestBodyEndereco,
+				JSONObject.class);
 		Endereco endereco = new Endereco();
-		endereco.setId(1);
-		endereco.setCep("88703-658");
-		endereco.setBairro("Sertão dos Correias");
-		endereco.setCidade("Tubarão");
-		endereco.setEstado("Santa Catarina");
-		endereco.setNumero("1194");
-		endereco.setComplemento("Casa");
-		endereco.setNome("Casa");
+		endereco.setId(enderecoJson.getInt("id"));
+		endereco.setNome(enderecoJson.getString("nome"));
+		endereco.setCep(enderecoJson.getString("cep"));
+		endereco.setRua(enderecoJson.getString("rua"));
+		endereco.setBairro(enderecoJson.getString("bairro"));
+		endereco.setCidade(enderecoJson.getString("cidade"));
+		endereco.setEstado(enderecoJson.getString("estado"));
+		endereco.setNumero(enderecoJson.getString("numeroDaCasa"));
+		endereco.setComplemento(enderecoJson.getString("complemento"));
+		
 		pedido.setEndereco(endereco);
 		
 		return pedido;
