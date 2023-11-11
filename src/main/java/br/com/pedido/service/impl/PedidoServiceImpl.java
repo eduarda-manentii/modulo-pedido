@@ -102,4 +102,9 @@ public class PedidoServiceImpl implements PedidoService {
 		return repository.listarPedidosPor(status);
 	}
 
+	@Override
+	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
+		return null;
+	}
+
 }

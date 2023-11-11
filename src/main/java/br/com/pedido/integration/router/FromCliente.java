@@ -35,30 +35,19 @@ public class FromCliente extends RouteBuilder implements Serializable {
 
 	@Override
 	public void configure() throws Exception {
-		from("direct:receberCliente").doTry().setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
-				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
-				.process(new Processor() {
+		from("direct:receberCliente")
+				.doTry()
+				.process(new Processor() {					
 					@Override
 					public void process(Exchange exchange) throws Exception {
 						String responseJson = exchange.getIn().getBody(String.class);
 						JSONObject jsonObject = new JSONObject(responseJson);
 						Integer idCliente = jsonObject.getInt("idCliente");
-						exchange.setProperty("idCliente", idCliente);
-
-						JSONObject requestBody = new JSONObject();
-						requestBody.put("email", login);
-						requestBody.put("senha", senha);
-						exchange.getMessage().setBody(requestBody.toString());
+						exchange.setProperty("idCliente", idCliente);						
 					}
-				}).to(urlDeToken).process(new Processor() {
-					@Override
-					public void process(Exchange exchange) throws Exception {
-						String responseJson = exchange.getMessage().getBody(String.class);
-						JSONObject jsonObject = new JSONObject(responseJson);
-						String token = jsonObject.getString("token");
-						exchange.setProperty("token", token);
-					}
-				}).setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
+				})
+				.to("direct:autenticar")
+				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))
 				.toD(urlDeEnvio + "/clientes/id/${exchangeProperty.idCliente}")

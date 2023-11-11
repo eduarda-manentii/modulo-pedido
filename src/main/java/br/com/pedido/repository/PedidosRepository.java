@@ -24,11 +24,23 @@ public interface PedidosRepository extends JpaRepository<Pedido, Integer> {
 	@Query("SELECT p FROM Pedido p WHERE p.status = :status")
 	public List<Pedido> listarPedidosPor(Status status);
 
-	@Query(value = "SELECT p FROM Pedido p WHERE p.idRestaurante = :idRestaurante " + "AND p.status = :status "
-			+ "AND p.retirada = :retirada", countQuery = "SELECT Count(p) "
-					+ " FROM Pedido p WHERE p.idRestaurante = :idRestaurante " + "AND p.status = :status "
-					+ "AND p.retirada = :retirada")
+	@Query(value = 
+			"SELECT p "
+			+ "FROM Pedido p "
+			+ "WHERE p.idRestaurante = :idRestaurante " 
+			+ "AND p.status = :status "
+			+ "AND p.retirada = :retirada", 
+			countQuery = "SELECT Count(p) "
+						+ "FROM Pedido p "
+						+ "WHERE p.idRestaurante = :idRestaurante " 
+						+ "AND p.status = :status "
+						+ "AND p.retirada = :retirada")
 	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Retirada retirada, Pageable paginacao);
+	
+	@Query(value = "SELECT p FROM Pedido p WHERE p.idRestaurante = :idRestaurante " + "AND p.status = :status", 
+			countQuery = "SELECT Count(p) "
+					+ " FROM Pedido p WHERE p.idRestaurante = :idRestaurante " + "AND p.status = :status")
+	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao);
 
 	@Query("SELECT p FROM Pedido p JOIN FETCH p.opcoes op WHERE p.id = :id ORDER BY p.data DESC")
 	Pedido buscarPor(@Param("id") Integer idDoPedido);

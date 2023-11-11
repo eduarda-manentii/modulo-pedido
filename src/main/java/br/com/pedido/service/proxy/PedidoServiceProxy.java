@@ -86,37 +86,59 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Override
 	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Retirada retirada, Pageable paginacao) {
-		return service.listarPor(idRestaurante, status, retirada, paginacao);
+		Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, paginacao);
+		for (Pedido pedido : pagina.getContent()) {
+			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
+		}
+		return pagina;
 	}
+	
 
 	@Override
 	public Pedido buscarPor(Integer id) {
 
 		Pedido pedido = service.buscarPor(id);
 		
-		//RECUPERA O RESTAURANTE NO JSON
+		pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
+		pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
+		pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
+		pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
+		
+		return pedido;
+
+	}
+
+	@Override
+	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
+		return service.listarPor(idRestaurante, status, paginacao);
+	}
+
+	//RECUPERA O RESTAURANTE NO JSON
+	private Restaurante buscarRestaurantePor(Integer id) {
 		JSONObject requestBodyRestaurante = new JSONObject();
-		requestBodyRestaurante.put("idRestaurante", pedido.getIdRestaurante());
+		requestBodyRestaurante.put("idRestaurante", id);
 		JSONObject restauranteJson = fromRestaurante.requestBody("direct:receberRestaurante", requestBodyRestaurante,
 				JSONObject.class);
 		Restaurante restaurante = new Restaurante();
 		restaurante.setId(restauranteJson.getInt("id"));
-		restaurante.setNome(restauranteJson.getString("nome"));
-		pedido.setRestaurante(restaurante);
-
-		//RECUPERA O CLIENTE NO JSON
+		restaurante.setNome(restauranteJson.getString("nome"));		
+		return restaurante;
+	}
+	
+	private Cliente buscarClientePor(Integer id) {
 		JSONObject requestBodyCliente = new JSONObject();
-		requestBodyCliente.put("idCliente", pedido.getIdCliente());
+		requestBodyCliente.put("idCliente", id);
 		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente,
 				JSONObject.class);
 		Cliente cliente = new Cliente();
 		cliente.setId(clienteJson.getInt("id"));
 		cliente.setNome(clienteJson.getString("nome"));
-		pedido.setCliente(cliente);
-		
-		//RECUPERA O CUPOM NO JSON
+		return cliente;
+	}
+	
+	private Cupom buscarCupomPor(Integer id) {
 		JSONObject requestBodyCupom = new JSONObject();
-		requestBodyCupom.put("idDoCupom", pedido.getIdCupom());
+		requestBodyCupom.put("idDoCupom",id);
 		JSONObject cupomJson = fromCupom.requestBody("direct:receberCupom", requestBodyCupom,
 				JSONObject.class);
 		Cupom cupom = new Cupom();
@@ -124,11 +146,12 @@ public class PedidoServiceProxy implements PedidoService {
 		cupom.setCodigo(cupomJson.getString("codigo"));
 		cupom.setStatus(cupomJson.getString("status"));
 		cupom.setValor(cupomJson.getBigDecimal("percentualDeDesconto"));
-		pedido.setCupom(cupom);
-		
-		//RECUPERA O ENDERECO NO JSON
+		return cupom;
+	}
+	
+	private Endereco buscarEnderecoPor(Integer id) {
 		JSONObject requestBodyEndereco = new JSONObject();
-		requestBodyEndereco.put("idEndereco", pedido.getIdEndereco());
+		requestBodyEndereco.put("idEndereco", id);
 		JSONObject enderecoJson = fromEndereco.requestBody("direct:receberEndereco", requestBodyEndereco,
 				JSONObject.class);
 		Endereco endereco = new Endereco();
@@ -141,11 +164,6 @@ public class PedidoServiceProxy implements PedidoService {
 		endereco.setEstado(enderecoJson.getString("estado"));
 		endereco.setNumero(enderecoJson.getString("numeroDaCasa"));
 		endereco.setComplemento(enderecoJson.getString("complemento"));
-		
-		pedido.setEndereco(endereco);
-		
-		return pedido;
-
+		return endereco;
 	}
-
 }

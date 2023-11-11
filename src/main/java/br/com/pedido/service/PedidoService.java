@@ -41,6 +41,14 @@ public interface PedidoService {
 			Retirada retirada,
 			Pageable paginacao);
 	
+	public Page<Pedido> listarPor(
+			@NotNull(message = "O id do restaurante é obrigatório")
+			@Positive(message = "O id do restaurante é obrigatório")
+			Integer idRestaurante,
+			@NotNull(message = "O status é obrigatorio")
+			Status status,
+			Pageable paginacao);
+	
 	public Pedido buscarPor(
 			@NotNull(message = "O id para busca é obrigatório")
 			@Positive(message = "O id para busca deve positivo")
