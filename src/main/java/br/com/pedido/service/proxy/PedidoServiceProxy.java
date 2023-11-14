@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Preconditions;
+
 import br.com.pedido.Dto.Cliente;
 import br.com.pedido.Dto.Cupom;
 import br.com.pedido.Dto.Endereco;
@@ -89,10 +91,12 @@ public class PedidoServiceProxy implements PedidoService {
 		Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, paginacao);
 		for (Pedido pedido : pagina.getContent()) {
 			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
+			pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
+			pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
+			pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
 		}
 		return pagina;
 	}
-	
 
 	@Override
 	public Pedido buscarPor(Integer id) {
@@ -113,7 +117,6 @@ public class PedidoServiceProxy implements PedidoService {
 		return service.listarPor(idRestaurante, status, paginacao);
 	}
 
-	//RECUPERA O RESTAURANTE NO JSON
 	private Restaurante buscarRestaurantePor(Integer id) {
 		JSONObject requestBodyRestaurante = new JSONObject();
 		requestBodyRestaurante.put("idRestaurante", id);
@@ -122,6 +125,7 @@ public class PedidoServiceProxy implements PedidoService {
 		Restaurante restaurante = new Restaurante();
 		restaurante.setId(restauranteJson.getInt("id"));
 		restaurante.setNome(restauranteJson.getString("nome"));		
+		
 		return restaurante;
 	}
 	
@@ -133,6 +137,7 @@ public class PedidoServiceProxy implements PedidoService {
 		Cliente cliente = new Cliente();
 		cliente.setId(clienteJson.getInt("id"));
 		cliente.setNome(clienteJson.getString("nome"));
+		
 		return cliente;
 	}
 	
@@ -146,6 +151,7 @@ public class PedidoServiceProxy implements PedidoService {
 		cupom.setCodigo(cupomJson.getString("codigo"));
 		cupom.setStatus(cupomJson.getString("status"));
 		cupom.setValor(cupomJson.getBigDecimal("percentualDeDesconto"));
+		
 		return cupom;
 	}
 	
@@ -164,6 +170,7 @@ public class PedidoServiceProxy implements PedidoService {
 		endereco.setEstado(enderecoJson.getString("estado"));
 		endereco.setNumero(enderecoJson.getString("numeroDaCasa"));
 		endereco.setComplemento(enderecoJson.getString("complemento"));
+		
 		return endereco;
 	}
 }

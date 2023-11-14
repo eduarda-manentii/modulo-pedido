@@ -50,7 +50,7 @@ public class PedidoServiceImpl implements PedidoService {
 	    pedido.setValorDesconto(desconto);
 	    subtotal = subtotal.subtract(desconto);
 	    pedido.setValorTotal(subtotal);
-	    pedido.setData(novoPedido.getData());
+	    
 	    Pedido pedidoSalvo = repository.save(pedido);
 
 	    for (NovaOpcaoDoPedido novaOpcao : novoPedido.getOpcoes()) {

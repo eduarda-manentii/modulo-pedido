@@ -2,6 +2,7 @@ package br.com.pedido.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,9 +106,9 @@ public class Pedido {
 	@Transient
 	private Restaurante restaurante;
 	
+	
 	@Column(name = "data")
-	@NotNull(message = "A data é obrigatória.")
-	private LocalDate data;
+	private LocalDateTime data;
 	
 	@OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, 
             cascade = CascadeType.ALL, orphanRemoval = true)
@@ -119,6 +120,7 @@ public class Pedido {
 	public Pedido() {
 		 this.status = Status.REALIZADO;
 		 this.opcoes = new ArrayList<OpcaoDoPedido>();
+		 this.data = LocalDateTime.now();
 		 this.novasOpcoes = new ArrayList<>();
 	}
 }

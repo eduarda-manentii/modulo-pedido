@@ -2,6 +2,7 @@ package br.com.pedido.Dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,10 +68,7 @@ public class NovoPedido {
 	private Integer idRestaurante;
 	
 	@NotNull(message = "O id do cardápio é obrigatório.")
-	private Integer idDoCardapio;
-	
-	@NotNull(message = "A data é obrigatória.")
-	private LocalDate data;
+	private Integer idDoCardapio;	
 	
 	@Size(min = 1, message = "O pedido deve possuir ao menos uma opção")
 	private List<NovaOpcaoDoPedido> opcoes;
@@ -78,6 +76,7 @@ public class NovoPedido {
 	public NovoPedido() {
 		this.opcoes = new ArrayList<>();
 		this.status = Status.REALIZADO;
+		
 	}
 
 }
