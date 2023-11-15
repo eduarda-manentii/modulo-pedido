@@ -1,7 +1,6 @@
 package br.com.pedido.service.impl;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -91,6 +90,11 @@ public class PedidoServiceImpl implements PedidoService {
 	}
 
 	@Override
+	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
+		return repository.listarPor(idRestaurante, status, paginacao);
+	}
+	
+	@Override
 	public Pedido buscarPor(Integer id) {
 		Pedido pedidoEncontrado = repository.buscarPor(id);
 		Preconditions.checkNotNull(pedidoEncontrado, 
@@ -99,13 +103,9 @@ public class PedidoServiceImpl implements PedidoService {
 	}
 
 	@Override
-	public List<Pedido> listarPedidosPor(Status status) {
-		return repository.listarPedidosPor(status);
+	public Page<Pedido> listarPedidosPor(Status status, Pageable paginacao) {
+		return repository.listarPedidosPor(status, paginacao);
 	}
 
-	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
-		return null;
-	}
 
 }

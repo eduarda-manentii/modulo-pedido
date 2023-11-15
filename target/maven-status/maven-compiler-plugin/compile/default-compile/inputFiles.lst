@@ -1,35 +1,41 @@
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/repository/PedidosRepository.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/entity/enums/Pagamento.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/service/impl/PedidoServiceImpl.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/integration/router/FromCupom.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/controller/PedidoController.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/entity/Pedido.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/integration/router/FromRestaurante.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/NovoPedido.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/service/OpcaoDoPedidoService.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/Cupom.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/integration/router/FromOpcao.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/exception/handler/ErrorConverter.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/exception/IntegracaoException.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/exception/ConverterException.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/exception/AutorizacaoException.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/Endereco.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/entity/composite/OpcaoDoPedidoId.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/repository/OpcoesDoPedidoRepository.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/entity/enums/Retirada.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/NovaOpcaoDoPedido.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/exception/RegistroNaoEncontradoException.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/exception/BusinessException.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/service/PedidoService.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/service/proxy/OpcaoDoPedidoServiceProxy.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/entity/OpcaoDoPedido.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/Restaurante.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/entity/enums/Status.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/integration/processor/ErrorProcessor.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/Cliente.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/service/proxy/PedidoServiceProxy.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/Categoria.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/service/impl/OpcaoDoPedidoServiceImpl.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/exception/ErroDaApi.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/InitApp.java
-/home/eduarda/Área de Trabalho/p/modulo-pedido/src/main/java/br/com/pedido/Dto/Frete.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\service\impl\PedidoServiceImpl.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\service\proxy\OpcaoDoPedidoServiceProxy.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromAutenticacaoCardapios.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\service\OpcaoDoPedidoService.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\entity\enums\Status.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\repository\OpcoesDoPedidoRepository.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\entity\OpcaoDoPedido.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\IntegracaoException.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromAutenticacaoCadastros.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\NovoPedido.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\handler\ErrorConverter.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\RegistroNaoEncontradoException.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\service\impl\OpcaoDoPedidoServiceImpl.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\entity\Pedido.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\handler\HandlerErrorDefault.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\Cupom.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\repository\PedidosRepository.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\entity\composite\OpcaoDoPedidoId.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\Cliente.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\controller\PedidoController.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\Frete.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\InitApp.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\service\PedidoService.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\Usuario.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\ErroDaApi.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\BusinessException.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromOpcao.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\processor\ErrorProcessor.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\entity\enums\Retirada.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromRestaurante.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\Restaurante.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\service\proxy\PedidoServiceProxy.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromEndereco.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\Categoria.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\NovaOpcaoDoPedido.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\ConverterException.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\exception\AutorizacaoException.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\entity\enums\Pagamento.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\Dto\Endereco.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromCliente.java
+C:\Users\Duda\Desktop\pedidos\modulo-pedido\src\main\java\br\com\pedido\integration\router\FromCupom.java

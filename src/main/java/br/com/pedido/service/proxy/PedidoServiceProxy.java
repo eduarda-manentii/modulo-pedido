@@ -1,7 +1,6 @@
 package br.com.pedido.service.proxy;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.apache.camel.ProducerTemplate;
 import org.json.JSONObject;
@@ -38,13 +37,13 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Autowired
 	private ProducerTemplate fromRestaurante;
-	
+
 	@Autowired
 	private ProducerTemplate fromCliente;
 
 	@Autowired
 	private ProducerTemplate fromEndereco;
-	
+
 	@Override
 	public Pedido salvar(NovoPedido novoPedido) {
 		Integer idDoCardapio = novoPedido.getIdDoCardapio();
@@ -81,8 +80,16 @@ public class PedidoServiceProxy implements PedidoService {
 	}
 
 	@Override
-	public List<Pedido> listarPedidosPor(Status status) {
-		return service.listarPedidosPor(status);
+	public Page<Pedido> listarPedidosPor(Status status, Pageable paginacao) {
+		Page<Pedido> pagina = service.listarPedidosPor(status, paginacao);
+		for (Pedido pedido : pagina.getContent()) {
+			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
+			pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
+			pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
+			pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
+			pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
+		}
+		return pagina;
 	}
 
 	@Override
@@ -93,15 +100,27 @@ public class PedidoServiceProxy implements PedidoService {
 			pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
 			pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
 			pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
+			pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
 		}
 		return pagina;
 	}
 
 	@Override
+	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
+		Page<Pedido> pagina = service.listarPor(idRestaurante, status, paginacao);
+		for (Pedido pedido : pagina.getContent()) {
+			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
+			pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
+			pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
+			pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
+			pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
+		}
+		return pagina;
+	}
+	
+	@Override
 	public Pedido buscarPor(Integer id) {
-
 		Pedido pedido = service.buscarPor(id);
-		
 		pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
 		pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
 		pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
@@ -109,13 +128,8 @@ public class PedidoServiceProxy implements PedidoService {
 		pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
 		
 		return pedido;
-
 	}
 
-	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
-		return service.listarPor(idRestaurante, status, paginacao);
-	}
 
 	private Restaurante buscarRestaurantePor(Integer id) {
 		JSONObject requestBodyRestaurante = new JSONObject();
@@ -124,52 +138,47 @@ public class PedidoServiceProxy implements PedidoService {
 				JSONObject.class);
 		Restaurante restaurante = new Restaurante();
 		restaurante.setId(restauranteJson.getInt("id"));
-		restaurante.setNome(restauranteJson.getString("nome"));		
-		
+		restaurante.setNome(restauranteJson.getString("nome"));
+
 		return restaurante;
 	}
-	
+
 	private Cliente buscarClientePor(Integer id) {
 		JSONObject requestBodyCliente = new JSONObject();
 		requestBodyCliente.put("idCliente", id);
-		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente,
-				JSONObject.class);		
+		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente, JSONObject.class);
 		Cliente cliente = new Cliente();
 		cliente.setId(clienteJson.getInt("id"));
-		cliente.setNome(clienteJson.getString("nome"));		
-		
+		cliente.setNome(clienteJson.getString("nome"));
+
 		return cliente;
 	}
-	
+
 	private Usuario buscarUsuarioPor(Integer id) {
 		JSONObject requestBodyCliente = new JSONObject();
 		requestBodyCliente.put("idCliente", id);
-		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente,
-				JSONObject.class);
-		
+		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente, JSONObject.class);
+
 		Usuario usuario = new Usuario();
-		JSONObject usuarioJson = clienteJson.getJSONObject("usuario");		
-		usuario.setEmail(usuarioJson.getString("email"));				
-		
+		JSONObject usuarioJson = clienteJson.getJSONObject("usuario");
+		usuario.setEmail(usuarioJson.getString("email"));
+
 		return usuario;
 	}
-	
 
-	
 	private Cupom buscarCupomPor(Integer id) {
 		JSONObject requestBodyCupom = new JSONObject();
-		requestBodyCupom.put("idDoCupom",id);
-		JSONObject cupomJson = fromCupom.requestBody("direct:receberCupom", requestBodyCupom,
-				JSONObject.class);
+		requestBodyCupom.put("idDoCupom", id);
+		JSONObject cupomJson = fromCupom.requestBody("direct:receberCupom", requestBodyCupom, JSONObject.class);
 		Cupom cupom = new Cupom();
 		cupom.setId(cupomJson.getInt("id"));
 		cupom.setCodigo(cupomJson.getString("codigo"));
 		cupom.setStatus(cupomJson.getString("status"));
 		cupom.setValor(cupomJson.getBigDecimal("percentualDeDesconto"));
-		
+
 		return cupom;
 	}
-	
+
 	private Endereco buscarEnderecoPor(Integer id) {
 		JSONObject requestBodyEndereco = new JSONObject();
 		requestBodyEndereco.put("idEndereco", id);
@@ -185,7 +194,7 @@ public class PedidoServiceProxy implements PedidoService {
 		endereco.setEstado(enderecoJson.getString("estado"));
 		endereco.setNumero(enderecoJson.getString("numeroDaCasa"));
 		endereco.setComplemento(enderecoJson.getString("complemento"));
-		
+
 		return endereco;
 	}
 }
