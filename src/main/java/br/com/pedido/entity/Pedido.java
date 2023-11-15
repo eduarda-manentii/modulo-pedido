@@ -1,7 +1,6 @@
 package br.com.pedido.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,7 @@ import br.com.pedido.Dto.Cupom;
 import br.com.pedido.Dto.Endereco;
 import br.com.pedido.Dto.NovaOpcaoDoPedido;
 import br.com.pedido.Dto.Restaurante;
+import br.com.pedido.Dto.Usuario;
 import br.com.pedido.entity.enums.Pagamento;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
@@ -85,6 +85,9 @@ public class Pedido {
 	
 	@Transient
 	private Cliente cliente;
+	
+	@Transient
+	private Usuario usuario;
 	
 	@Column(name = "id_cupom")
 	private Integer idCupom;

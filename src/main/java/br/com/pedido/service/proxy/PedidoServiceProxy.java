@@ -11,14 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.google.common.base.Preconditions;
-
 import br.com.pedido.Dto.Cliente;
 import br.com.pedido.Dto.Cupom;
 import br.com.pedido.Dto.Endereco;
 import br.com.pedido.Dto.NovaOpcaoDoPedido;
 import br.com.pedido.Dto.NovoPedido;
 import br.com.pedido.Dto.Restaurante;
+import br.com.pedido.Dto.Usuario;
 import br.com.pedido.entity.Pedido;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
@@ -107,6 +106,7 @@ public class PedidoServiceProxy implements PedidoService {
 		pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
 		pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
 		pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
+		pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
 		
 		return pedido;
 
@@ -133,13 +133,28 @@ public class PedidoServiceProxy implements PedidoService {
 		JSONObject requestBodyCliente = new JSONObject();
 		requestBodyCliente.put("idCliente", id);
 		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente,
-				JSONObject.class);
+				JSONObject.class);		
 		Cliente cliente = new Cliente();
 		cliente.setId(clienteJson.getInt("id"));
-		cliente.setNome(clienteJson.getString("nome"));
+		cliente.setNome(clienteJson.getString("nome"));		
 		
 		return cliente;
 	}
+	
+	private Usuario buscarUsuarioPor(Integer id) {
+		JSONObject requestBodyCliente = new JSONObject();
+		requestBodyCliente.put("idCliente", id);
+		JSONObject clienteJson = fromCliente.requestBody("direct:receberCliente", requestBodyCliente,
+				JSONObject.class);
+		
+		Usuario usuario = new Usuario();
+		JSONObject usuarioJson = clienteJson.getJSONObject("usuario");		
+		usuario.setEmail(usuarioJson.getString("email"));				
+		
+		return usuario;
+	}
+	
+
 	
 	private Cupom buscarCupomPor(Integer id) {
 		JSONObject requestBodyCupom = new JSONObject();

@@ -17,4 +17,6 @@ public class Cliente {
 	@NotBlank(message = "O nome é obrigatório")
 	private String nome;
 	
+	private Usuario usuario;
+	
 }

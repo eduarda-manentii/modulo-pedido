@@ -29,7 +29,7 @@ public interface PedidosRepository extends JpaRepository<Pedido, Integer> {
 			+ "FROM Pedido p "
 			+ "WHERE p.idRestaurante = :idRestaurante " 
 			+ "AND p.status = :status "
-			+ "AND p.retirada = :retirada", 
+			+ "AND p.retirada = :retirada order by p.data", 
 			countQuery = "SELECT Count(p) "
 						+ "FROM Pedido p "
 						+ "WHERE p.idRestaurante = :idRestaurante " 

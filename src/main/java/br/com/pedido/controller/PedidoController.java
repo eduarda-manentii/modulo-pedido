@@ -116,8 +116,9 @@ public class PedidoController {
 
 		Map<String, Object> clienteMap = new HashMap<String, Object>();
 		clienteMap.put("id_cliente", pedido.getCliente().getId());
-		clienteMap.put("nome", pedido.getCliente().getNome());
-		pedidoMap.put("cliente", clienteMap);
+		clienteMap.put("nome", pedido.getCliente().getNome());		
+		clienteMap.put("email", pedido.getUsuario().getEmail());
+		pedidoMap.put("cliente", clienteMap);		
 		
 		Map<String, Object> enderecoMap = new HashMap<String, Object>();
 		enderecoMap.put("id_endereco", pedido.getEndereco().getId());
