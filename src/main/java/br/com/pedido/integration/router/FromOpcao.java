@@ -48,29 +48,15 @@ public class FromOpcao extends RouteBuilder implements Serializable {
 	                 Integer idDoCardapio = jsonObject.getInt("idDoCardapio");
 	                 exchange.setProperty("idDaOpcao", idDaOpcao);
 	                 exchange.setProperty("idDoCardapio", idDoCardapio);
-	                
-	                JSONObject requestBody = new JSONObject();
-	                requestBody.put("login", login);
-	                requestBody.put("senha", senha);
-	                exchange.getMessage().setBody(requestBody.toString());
+
 	            }
 	        })
-	        .to(urlDeToken)
-	        .process(new Processor() {
-	            @Override
-	            public void process(Exchange exchange) throws Exception {
-	                String responseJson = exchange.getMessage().getBody(String.class);
-	                JSONObject jsonObject = new JSONObject(responseJson);
-	                String token = jsonObject.getString("token");
-	                exchange.setProperty("token", token);
-	            }
-			})
+	        .to("direct:autenticarCardapios")
 	        .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 	        .setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 	        .setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))	        
 	        .toD(urlDeEnvio + "/opcoes-cardapio/cardapio/${exchangeProperty.idDoCardapio}/opcao/${exchangeProperty.idDaOpcao}")
-	        .process(new Processor() {
-				
+	        .process(new Processor() {				
 				@Override
 				public void process(Exchange exchange) throws Exception {					
 					String responseJson = exchange.getIn().getBody(String.class);

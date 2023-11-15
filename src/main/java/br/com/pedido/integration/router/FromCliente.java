@@ -46,7 +46,7 @@ public class FromCliente extends RouteBuilder implements Serializable {
 						exchange.setProperty("idCliente", idCliente);						
 					}
 				})
-				.to("direct:autenticar")
+				.to("direct:autenticarCadastros")
 				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))

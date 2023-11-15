@@ -11,29 +11,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FromAutenticacao extends RouteBuilder implements Serializable{
+public class FromAutenticacaoCadastros extends RouteBuilder implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	@Value("${cadastros.login}")
+
+	@Value("${mktplace.url.token}")
+	private String urlDeToken;
+
+	@Value("${mktplace.login}")
 	private String login;
 
-	@Value("${cadastros.password}")
+	@Value("${mktplace.password}")
 	private String senha;
-	
-	@Value("${cadastros.url.token}")
-	private String urlDeToken;
 	
 	@Override
 	public void configure() throws Exception {
-		from("direct:autenticar")
+		from("direct:autenticarCardapios")
 		.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 		.process(new Processor() {
 			@Override
 			public void process(Exchange exchange) throws Exception {
 				JSONObject requestBody = new JSONObject();
-				requestBody.put("email", login);
+				requestBody.put("login", login);
 				requestBody.put("senha", senha);
 				exchange.getMessage().setBody(requestBody.toString());
 			}

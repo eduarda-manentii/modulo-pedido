@@ -99,6 +99,10 @@ public class Pedido {
 	@Transient
 	private Endereco endereco;
 	
+	@NotNull(message = "O cardapio é obrigatório.")
+	@Column(name = "id_cardapio")
+	private Integer idCardapio;
+	
 	@Column(name = "id_restaurante")
 	@NotNull(message = "O restaurante é obrigatório.")
 	private Integer idRestaurante;

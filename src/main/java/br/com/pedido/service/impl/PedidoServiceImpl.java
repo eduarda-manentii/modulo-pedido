@@ -37,6 +37,7 @@ public class PedidoServiceImpl implements PedidoService {
 	    pedido.setIdEndereco(novoPedido.getIdEndereco());
 	    pedido.setIdRestaurante(novoPedido.getIdRestaurante());
 	    pedido.setCupom(novoPedido.getCupom());
+	    pedido.setIdCardapio(novoPedido.getIdDoCardapio());
 	    
 	    BigDecimal frete = novoPedido.getValorFrete();
 	    pedido.setValorFrete(frete);

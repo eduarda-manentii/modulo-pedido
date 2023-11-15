@@ -44,21 +44,10 @@ public class FromRestaurante extends RouteBuilder implements Serializable {
 						JSONObject jsonObject = new JSONObject(responseJson);
 						Integer idRestaurante = jsonObject.getInt("idRestaurante");
 						exchange.setProperty("idRestaurante", idRestaurante);
-
-						JSONObject requestBody = new JSONObject();
-						requestBody.put("login", login);
-						requestBody.put("senha", senha);
-						exchange.getMessage().setBody(requestBody.toString());
+						
 					}
-				}).to(urlDeToken).process(new Processor() {
-					@Override
-					public void process(Exchange exchange) throws Exception {
-						String responseJson = exchange.getMessage().getBody(String.class);
-						JSONObject jsonObject = new JSONObject(responseJson);
-						String token = jsonObject.getString("token");
-						exchange.setProperty("token", token);
-					}
-				}).setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
+				}).to("direct:autenticarCardapios")
+				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))
 				.toD(urlDeEnvio + "/restaurantes/id/${exchangeProperty.idRestaurante}")

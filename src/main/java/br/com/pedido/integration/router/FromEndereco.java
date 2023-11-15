@@ -45,25 +45,13 @@ public class FromEndereco extends RouteBuilder implements Serializable {
 						Integer idEndereco = jsonObject.getInt("idEndereco");
 						exchange.setProperty("idEndereco", idEndereco);
 
-						JSONObject requestBody = new JSONObject();
-						requestBody.put("email", login);
-						requestBody.put("senha", senha);
-						exchange.getMessage().setBody(requestBody.toString());
 					}
-				}).to(urlDeToken).process(new Processor() {
-					@Override
-					public void process(Exchange exchange) throws Exception {
-						String responseJson = exchange.getMessage().getBody(String.class);
-						JSONObject jsonObject = new JSONObject(responseJson);
-						String token = jsonObject.getString("token");
-						exchange.setProperty("token", token);
-					}
-				}).setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
+				}).to("direct:autenticarCadastros")
+				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))
 				.toD(urlDeEnvio + "/enderecos/id/${exchangeProperty.idEndereco}")
 				.process(new Processor() {
-
 					@Override
 					public void process(Exchange exchange) throws Exception {
 						String responseJson = exchange.getIn().getBody(String.class);

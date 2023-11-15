@@ -1,6 +1,8 @@
 package br.com.pedido.controller;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,9 +85,19 @@ public class PedidoController {
 	}
 	
 	private Map<String, Object> converter(Pedido pedido) {
+		
+
+		
 		Map<String, Object> pedidoMap = new HashMap<String, Object>();
 		pedidoMap.put("id_pedido", pedido.getId());
-		pedidoMap.put("data_pedido", pedido.getData());
+		
+		LocalDateTime dataEncontrada = pedido.getData();			
+		DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		String dataFormatada = formatterData.format(dataEncontrada);	
+		DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+		String horaFormatada = formatterHora.format(dataEncontrada);
+		
+		pedidoMap.put("data_pedido", dataFormatada + " - " +horaFormatada);
 		pedidoMap.put("pagamento", pedido.getPagamento());
 		pedidoMap.put("opcoes", pedido.getOpcoes());
 		pedidoMap.put("tipo de entrega", pedido.getRetirada());
@@ -95,6 +107,7 @@ public class PedidoController {
 		pedidoMap.put("valor dos itens", pedido.getValorItens());
 		pedidoMap.put("desconto", pedido.getValorDesconto());
 		pedidoMap.put("opcoes", pedido.getOpcoes());
+		pedidoMap.put("id_cardapio", pedido.getIdCardapio());
 		
 		Map<String, Object> restauranteMap = new HashMap<String, Object>();
 		restauranteMap.put("id_restaurante", pedido.getRestaurante().getId());
@@ -136,5 +149,6 @@ public class PedidoController {
 		pedidoMap.put("opcoes", opcoesMap);
 		return pedidoMap;
 	}
+
 
 }
