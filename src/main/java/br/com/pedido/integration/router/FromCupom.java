@@ -14,20 +14,20 @@ import org.springframework.stereotype.Component;
 import br.com.pedido.integration.processor.ErrorProcessor;
 
 @Component
-public class FromOpcao extends RouteBuilder implements Serializable {
+public class FromCupom extends RouteBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Value("${mktplace.url}")
+	@Value("${cadastros.url}")
 	private String urlDeEnvio;
 	
-	@Value("${mktplace.url.token}")
+	@Value("${cadastros.url.token}")
 	private String urlDeToken;
 	
-	@Value("${mktplace.login}")
+	@Value("${cadastros.login}")
 	private String login;
 	
-	@Value("${mktplace.password}")
+	@Value("${cadastros.password}")
 	private String senha;
 	
 	@Autowired
@@ -35,7 +35,7 @@ public class FromOpcao extends RouteBuilder implements Serializable {
 
 	@Override
 	public void configure() throws Exception {
-	    from("direct:receberOpcao")
+	    from("direct:receberCupom")
 	        .doTry()
 	        .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
 	        .setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
@@ -44,18 +44,15 @@ public class FromOpcao extends RouteBuilder implements Serializable {
 	            public void process(Exchange exchange) throws Exception {
 	            	 String responseJson = exchange.getIn().getBody(String.class);
 	                 JSONObject jsonObject = new JSONObject(responseJson);
-	                 Integer idDaOpcao = jsonObject.getInt("idDaOpcao");
-	                 Integer idDoCardapio = jsonObject.getInt("idDoCardapio");
-	                 exchange.setProperty("idDaOpcao", idDaOpcao);
-	                 exchange.setProperty("idDoCardapio", idDoCardapio);
-
+	                 Integer idDoCupom = jsonObject.getInt("idDoCupom");
+	                 exchange.setProperty("idDoCupom", idDoCupom);
 	            }
 	        })
-	        .to("direct:autenticarCardapios")
+	        .to("direct:autenticarCadastros")	        
 	        .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 	        .setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 	        .setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))	        
-	        .toD(urlDeEnvio + "/opcoes-cardapio/cardapio/${exchangeProperty.idDoCardapio}/opcao/${exchangeProperty.idDaOpcao}")
+	        .toD(urlDeEnvio + "/cupons/id/${exchangeProperty.idDoCupom}")
 	        .process(new Processor() {				
 				@Override
 				public void process(Exchange exchange) throws Exception {					

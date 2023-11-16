@@ -5,10 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@AllArgsConstructor
 @Data
 public class Endereco {
 
@@ -23,6 +21,10 @@ public class Endereco {
 	@Size(max = 45, message = "O cep não deve conter mais de 45 caracteries")
 	@NotBlank(message = "O cep é obrigatório")
 	private String cep;
+	
+	@Size(max = 45, message = "O rua não deve conter mais de 45 caracteries")
+	@NotBlank(message = "A rua é obrigatória")
+	private String rua;
 	
 	@Size(max = 45, message = "A cidade não deve conter mais de 45 caracteries")
 	@NotBlank(message = "A cidade é obrigatória")

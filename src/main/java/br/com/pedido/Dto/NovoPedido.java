@@ -1,7 +1,6 @@
 package br.com.pedido.Dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import br.com.pedido.entity.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -56,6 +56,9 @@ public class NovoPedido {
 	@NotNull(message = "O cupom é obrigatório.")
 	private Integer idCupom;
 	
+	@Transient
+	private Cupom cupom;
+	
 	@NotNull(message = "O endereço é obrigatório.")
 	private Integer idEndereco;
 	
@@ -63,10 +66,7 @@ public class NovoPedido {
 	private Integer idRestaurante;
 	
 	@NotNull(message = "O id do cardápio é obrigatório.")
-	private Integer idDoCardapio;
-	
-	@NotNull(message = "A data é obrigatória.")
-	private LocalDate data;
+	private Integer idDoCardapio;	
 	
 	@Size(min = 1, message = "O pedido deve possuir ao menos uma opção")
 	private List<NovaOpcaoDoPedido> opcoes;
@@ -74,6 +74,7 @@ public class NovoPedido {
 	public NovoPedido() {
 		this.opcoes = new ArrayList<>();
 		this.status = Status.REALIZADO;
+		
 	}
 
 }

@@ -1,7 +1,7 @@
 package br.com.pedido.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +10,7 @@ import br.com.pedido.Dto.Cupom;
 import br.com.pedido.Dto.Endereco;
 import br.com.pedido.Dto.NovaOpcaoDoPedido;
 import br.com.pedido.Dto.Restaurante;
+import br.com.pedido.Dto.Usuario;
 import br.com.pedido.entity.enums.Pagamento;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
@@ -59,7 +60,7 @@ public class Pedido {
 	private Pagamento pagamento;
 	
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor total não pode ser inferior a 0.0")
-	@Digits(integer = 2, fraction = 2, message = "O valor total deve possuir o formato 'NN.NN'")
+	//@Digits(integer = 2, fraction = 2, message = "O valor total deve possuir o formato 'NN.NN'")
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	
@@ -85,6 +86,9 @@ public class Pedido {
 	@Transient
 	private Cliente cliente;
 	
+	@Transient
+	private Usuario usuario;
+	
 	@Column(name = "id_cupom")
 	private Integer idCupom;
 	
@@ -98,6 +102,10 @@ public class Pedido {
 	@Transient
 	private Endereco endereco;
 	
+	@NotNull(message = "O cardapio é obrigatório.")
+	@Column(name = "id_cardapio")
+	private Integer idCardapio;
+	
 	@Column(name = "id_restaurante")
 	@NotNull(message = "O restaurante é obrigatório.")
 	private Integer idRestaurante;
@@ -105,22 +113,21 @@ public class Pedido {
 	@Transient
 	private Restaurante restaurante;
 	
-	@Column(name = "data")
-	@NotNull(message = "A data é obrigatória.")
-	private LocalDate data;
 	
+	@Column(name = "data")
+	private LocalDateTime data;
 	
 	@OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, 
             cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OpcaoDoPedido> opcoes;
 
-	
 	@Transient
 	private List<NovaOpcaoDoPedido> novasOpcoes;
 	
 	public Pedido() {
 		 this.status = Status.REALIZADO;
 		 this.opcoes = new ArrayList<OpcaoDoPedido>();
+		 this.data = LocalDateTime.now();
 		 this.novasOpcoes = new ArrayList<>();
 	}
 }

@@ -1,7 +1,6 @@
 package br.com.pedido.service.impl;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,11 +35,22 @@ public class PedidoServiceImpl implements PedidoService {
 	    pedido.setIdCupom(novoPedido.getIdCupom());
 	    pedido.setIdEndereco(novoPedido.getIdEndereco());
 	    pedido.setIdRestaurante(novoPedido.getIdRestaurante());
-	    pedido.setValorDesconto(novoPedido.getValorDesconto());
-	    pedido.setValorFrete(novoPedido.getValorFrete());
-	    pedido.setValorItens(novoPedido.getValorItens());
-	    pedido.setValorTotal(novoPedido.getValorTotal());
-	    pedido.setData(novoPedido.getData());
+	    pedido.setCupom(novoPedido.getCupom());
+	    pedido.setIdCardapio(novoPedido.getIdDoCardapio());
+	    
+	    BigDecimal frete = novoPedido.getValorFrete();
+	    pedido.setValorFrete(frete);
+	    
+	    BigDecimal valorItens = novoPedido.getValorItens();
+	    pedido.setValorItens(valorItens);
+	    BigDecimal subtotal = valorItens.add(frete);
+	    
+	    BigDecimal porcentagemDesconto = pedido.getCupom().getValor();
+	    BigDecimal desconto = (porcentagemDesconto.multiply(subtotal)).divide(new BigDecimal(100));
+	    pedido.setValorDesconto(desconto);
+	    subtotal = subtotal.subtract(desconto);
+	    pedido.setValorTotal(subtotal);
+	    
 	    Pedido pedidoSalvo = repository.save(pedido);
 
 	    for (NovaOpcaoDoPedido novaOpcao : novoPedido.getOpcoes()) {
@@ -55,6 +65,8 @@ public class PedidoServiceImpl implements PedidoService {
 			opcaoDoPedido.setValorItem(valor);
 			BigDecimal subTotal = valor.multiply(new BigDecimal(novaOpcao.getQtdeItens()));
 			opcaoDoPedido.setSubtotal(subTotal);
+			opcaoDoPedido.setNome(novaOpcao.getNome());
+			opcaoDoPedido.setPromocao(novaOpcao.getPromocao());
 			
 	        pedidoSalvo.getOpcoes().add(opcaoDoPedido);
 	    }
@@ -78,6 +90,11 @@ public class PedidoServiceImpl implements PedidoService {
 	}
 
 	@Override
+	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
+		return repository.listarPor(idRestaurante, status, paginacao);
+	}
+	
+	@Override
 	public Pedido buscarPor(Integer id) {
 		Pedido pedidoEncontrado = repository.buscarPor(id);
 		Preconditions.checkNotNull(pedidoEncontrado, 
@@ -86,8 +103,9 @@ public class PedidoServiceImpl implements PedidoService {
 	}
 
 	@Override
-	public List<Pedido> listarPedidosPor(Status status) {
-		return repository.listarPedidosPor(status);
+	public Page<Pedido> listarPedidosPor(Status status, Pageable paginacao) {
+		return repository.listarPedidosPor(status, paginacao);
 	}
+
 
 }
