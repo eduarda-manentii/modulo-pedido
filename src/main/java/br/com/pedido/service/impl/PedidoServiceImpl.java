@@ -75,14 +75,17 @@ public class PedidoServiceImpl implements PedidoService {
 	}
 
 	@Override
-	public void atualizarStatusPor(Integer id, Status status) {
-		Pedido pedidoEncontrado = repository.buscarPor(id);
-		Preconditions.checkNotNull(pedidoEncontrado, 
-				"Não existe pedido para o id informado");
-		Preconditions.checkArgument(pedidoEncontrado.getStatus() != status, 
-				"O status já está salvo para a categoria");
-		this.repository.atualizarStatusPor(id, status);
+	public void atualizarStatusPor(Integer id, Status novoStatus) {
+	    Pedido pedidoEncontrado = repository.buscarPor(id);
+	    Preconditions.checkNotNull(pedidoEncontrado, "Não existe pedido para o id informado");
+	    Status statusAtual = pedidoEncontrado.getStatus();
+	    Preconditions.checkArgument(statusAtual != novoStatus, "O novo status é igual ao status atual");
+	    Preconditions.checkArgument(statusAtual.ordinal() < novoStatus.ordinal(),
+	            "O novo status não pode ser igual ou anterior ao status atual");
+
+	    repository.atualizarStatusPor(id, novoStatus);
 	}
+
 
 	@Override
 	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Retirada retirada, Pageable paginacao) {
