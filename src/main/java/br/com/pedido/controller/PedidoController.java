@@ -56,51 +56,32 @@ public class PedidoController {
 	}
 
 	@GetMapping
-	public ResponseEntity<?> listarPor(@RequestParam(name = "id-restaurante") Integer idDoRestaurante,
+	public ResponseEntity<?> listarPor(@RequestParam(name = "id-restaurante") Optional<Integer> idDoRestaurante,
 			@RequestParam(name = "status") Status status,
-			@RequestParam(name = "retirada", required = false) Retirada retirada,
-			@RequestParam("pagina") Optional<Integer> pagina) {
+			@RequestParam(name = "retirada") Optional<Retirada> retirada,
+			@RequestParam(name = "pagina") Optional<Integer> pagina,
+			@RequestParam(name = "resumo") Optional<Integer> resumo) {
 		Pageable paginacao = null;
 		if (pagina.isPresent()) {
 			paginacao = PageRequest.of(pagina.get(), 15);
 		} else {
 			paginacao = PageRequest.of(0, 15);
 		}
-		Page<Pedido> page;
-		if (retirada != null) {
-			page = service.listarPor(idDoRestaurante, status, retirada, paginacao);
-		} else {
-			page = service.listarPor(idDoRestaurante, status, paginacao);
-		}
+		Page<Pedido> page = service.listarPor(idDoRestaurante, status, retirada, paginacao);;
 		Map<String, Object> pageMap = new HashMap<String, Object>();
 		pageMap.put("paginacaoAtual", page.getNumber());
 		pageMap.put("totalDeItens", page.getTotalElements());
 		pageMap.put("totalDePaginas", page.getTotalPages());
 		List<Map<String, Object>> listagem = new ArrayList<Map<String, Object>>();
-		for (Pedido pedido : page.getContent()) {
-			listagem.add(converter(pedido));
-		}
-		pageMap.put("listagem", listagem);
-		return ResponseEntity.ok(pageMap);
-	}
-	
-	@GetMapping("/status/{status}")
-	public ResponseEntity<?> listarPedidosPor(@PathVariable("status") Status status,
-			@RequestParam("pagina") Optional<Integer> pagina) {
-		Pageable paginacao = null;
-		if (pagina.isPresent()) {
-			paginacao = PageRequest.of(pagina.get(), 15);
+		
+		if (resumo.isEmpty() || resumo.get() == 0) {
+			for (Pedido pedido : page.getContent()) {
+				listagem.add(converter(pedido));
+			}
 		} else {
-			paginacao = PageRequest.of(0, 15);
-		}
-		Page<Pedido> page = service.listarPedidosPor(status, paginacao);
-		Map<String, Object> pageMap = new HashMap<String, Object>();
-		pageMap.put("paginacaoAtual", page.getNumber());
-		pageMap.put("totalDeItens", page.getTotalElements());
-		pageMap.put("totalDePaginas", page.getTotalPages());
-		List<Map<String, Object>> listagem = new ArrayList<Map<String, Object>>();
-		for (Pedido pedido : page.getContent()) {
-			listagem.add(converter(pedido));
+			for (Pedido pedido : page.getContent()) {
+				listagem.add(converterResumido(pedido));
+			}
 		}
 		pageMap.put("listagem", listagem);
 		return ResponseEntity.ok(pageMap);
@@ -110,7 +91,6 @@ public class PedidoController {
 	public ResponseEntity<?> buscarPor(@PathVariable("id") Integer id) {
 		Pedido pedidoEncontrado = service.buscarPor(id);
 		return ResponseEntity.ok(converter(pedidoEncontrado));
-
 	}
 	
 	private Map<String, Object> converter(Pedido pedido) {
@@ -162,6 +142,48 @@ public class PedidoController {
 		cupomMap.put("codigo", pedido.getCupom().getCodigo());
 		cupomMap.put("valor", pedido.getCupom().getValor() + "%");
 		pedidoMap.put("cupom", cupomMap);
+		
+		List<Map<String, Object>> opcoesMap = new ArrayList<Map<String, Object>>();
+		for (OpcaoDoPedido opcaoDoPedido : pedido.getOpcoes()) {
+				Map<String, Object> opcaoMap = new HashMap<String, Object>();
+				opcaoMap.put("nome", opcaoDoPedido.getNome());
+				opcaoMap.put("promocao", opcaoDoPedido.getPromocao());
+				opcaoMap.put("qtde_itens", opcaoDoPedido.getQtdeItens());
+				opcaoMap.put("valor", opcaoDoPedido.getValorItem());
+				opcaoMap.put("subtotal", opcaoDoPedido.getSubtotal());
+				opcoesMap.add(opcaoMap);
+			}
+			
+		pedidoMap.put("opcoes", opcoesMap);
+		return pedidoMap;
+	}
+	
+	
+	private Map<String, Object> converterResumido(Pedido pedido) {
+		Map<String, Object> pedidoMap = new HashMap<String, Object>();
+		pedidoMap.put("id_pedido", pedido.getId());
+		LocalDateTime dataEncontrada = pedido.getData();			
+		DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		String dataFormatada = formatterData.format(dataEncontrada);	
+		DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+		String horaFormatada = formatterHora.format(dataEncontrada);
+		
+		pedidoMap.put("data_pedido", dataFormatada + " - " + horaFormatada);
+		pedidoMap.put("pagamento", pedido.getPagamento());
+		pedidoMap.put("opcoes", pedido.getOpcoes());
+		pedidoMap.put("tipo de entrega", pedido.getRetirada());
+		pedidoMap.put("status", pedido.getStatus());
+		pedidoMap.put("valor total", pedido.getValorTotal());
+		pedidoMap.put("valor do frete", pedido.getValorFrete());
+		pedidoMap.put("valor dos itens", pedido.getValorItens());
+		pedidoMap.put("desconto", pedido.getValorDesconto());
+		pedidoMap.put("opcoes", pedido.getOpcoes());
+		pedidoMap.put("id_cardapio", pedido.getIdCardapio());
+		pedidoMap.put("id_restaurante", pedido.getIdRestaurante());
+		pedidoMap.put("id_cupom", pedido.getIdCupom());
+		pedidoMap.put("id_cliente", pedido.getIdCliente());
+		pedidoMap.put("id_endereco", pedido.getIdCliente());
+		pedidoMap.put("id_cardapio", pedido.getIdCardapio());
 		
 		List<Map<String, Object>> opcoesMap = new ArrayList<Map<String, Object>>();
 		for (OpcaoDoPedido opcaoDoPedido : pedido.getOpcoes()) {

@@ -1,6 +1,7 @@
 package br.com.pedido.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -86,17 +87,12 @@ public class PedidoServiceImpl implements PedidoService {
 	    repository.atualizarStatusPor(id, novoStatus);
 	}
 
-
 	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Retirada retirada, Pageable paginacao) {
+	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, Optional<Retirada> retirada,
+			Pageable paginacao) {
 		return repository.listarPor(idRestaurante, status, retirada, paginacao);
 	}
 
-	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
-		return repository.listarPor(idRestaurante, status, paginacao);
-	}
-	
 	@Override
 	public Pedido buscarPor(Integer id) {
 		Pedido pedidoEncontrado = repository.buscarPor(id);
@@ -104,11 +100,5 @@ public class PedidoServiceImpl implements PedidoService {
 				"Não existe pedido para o id informado");
 		return pedidoEncontrado;
 	}
-
-	@Override
-	public Page<Pedido> listarPedidosPor(Status status, Pageable paginacao) {
-		return repository.listarPedidosPor(status, paginacao);
-	}
-
 
 }

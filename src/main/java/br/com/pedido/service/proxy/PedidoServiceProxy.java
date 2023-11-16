@@ -1,6 +1,7 @@
 package br.com.pedido.service.proxy;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.apache.camel.ProducerTemplate;
 import org.json.JSONObject;
@@ -80,20 +81,7 @@ public class PedidoServiceProxy implements PedidoService {
 	}
 
 	@Override
-	public Page<Pedido> listarPedidosPor(Status status, Pageable paginacao) {
-		Page<Pedido> pagina = service.listarPedidosPor(status, paginacao);
-		for (Pedido pedido : pagina.getContent()) {
-			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
-			pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
-			pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
-			pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
-			pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
-		}
-		return pagina;
-	}
-
-	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Retirada retirada, Pageable paginacao) {
+	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, Optional<Retirada> retirada, Pageable paginacao) {
 		Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, paginacao);
 		for (Pedido pedido : pagina.getContent()) {
 			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
@@ -105,19 +93,6 @@ public class PedidoServiceProxy implements PedidoService {
 		return pagina;
 	}
 
-	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
-		Page<Pedido> pagina = service.listarPor(idRestaurante, status, paginacao);
-		for (Pedido pedido : pagina.getContent()) {
-			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
-			pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
-			pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
-			pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
-			pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
-		}
-		return pagina;
-	}
-	
 	@Override
 	public Pedido buscarPor(Integer id) {
 		Pedido pedido = service.buscarPor(id);
