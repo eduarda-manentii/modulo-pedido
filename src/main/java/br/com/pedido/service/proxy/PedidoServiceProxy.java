@@ -1,6 +1,8 @@
 package br.com.pedido.service.proxy;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.camel.ProducerTemplate;
@@ -44,6 +46,12 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Autowired
 	private ProducerTemplate fromEndereco;
+	
+	private Map<Integer, Cliente> cacheClientes = new HashMap<>();
+	private Map<Integer, Restaurante> cacheRestaurantes = new HashMap<>();
+	private Map<Integer, Usuario> cacheUsuarios = new HashMap<>();
+	private Map<Integer, Cupom> cacheCupons = new HashMap<>();
+	private Map<Integer, Endereco> cacheEnderecos = new HashMap<>();
 
 	@Override
 	public Pedido salvar(NovoPedido novoPedido) {
@@ -81,33 +89,31 @@ public class PedidoServiceProxy implements PedidoService {
 	}
 
 	@Override
-	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, 
-			Optional<Retirada> retirada, Optional<Integer> resumo, Pageable paginacao) {
-		Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, resumo, paginacao);
-		if (resumo.isEmpty() || resumo.get() == 0) {
-			for (Pedido pedido : pagina.getContent()) {
-				pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
-				pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
-				pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
-				pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
-				pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
-			}
-		}
-		return pagina;
+	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status,
+	        Optional<Retirada> retirada, Optional<Integer> resumo, Pageable paginacao) {
+	    Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, resumo, paginacao);
+	    if (resumo.isEmpty() || resumo.get() == 0) {
+	        for (Pedido pedido : pagina.getContent()) {
+	            carregarInformacoesExtras(pedido);
+	        }
+	    }
+	    return pagina;
 	}
 
 	@Override
 	public Pedido buscarPor(Integer id) {
-		Pedido pedido = service.buscarPor(id);
-		pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
-		pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
-		pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
-		pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
-		pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
-		
-		return pedido;
+	    Pedido pedido = service.buscarPor(id);
+	    carregarInformacoesExtras(pedido);
+	    return pedido;
 	}
 
+	private void carregarInformacoesExtras(Pedido pedido) {
+	    pedido.setRestaurante(obterRestaurante(pedido.getIdRestaurante()));
+	    pedido.setCliente(obterCliente(pedido.getIdCliente()));
+	    pedido.setCupom(obterCupom(pedido.getIdCupom()));
+	    pedido.setEndereco(obterEndereco(pedido.getIdEndereco()));
+	    pedido.setUsuario(obterUsuario(pedido.getIdCliente()));
+	}
 
 	private Restaurante buscarRestaurantePor(Integer id) {
 		JSONObject requestBodyRestaurante = new JSONObject();
@@ -174,5 +180,25 @@ public class PedidoServiceProxy implements PedidoService {
 		endereco.setComplemento(enderecoJson.getString("complemento"));
 
 		return endereco;
+	}
+	
+	private Cliente obterCliente(Integer id) {
+		return cacheClientes.computeIfAbsent(id, this::buscarClientePor);
+	}
+	
+	private Restaurante obterRestaurante(Integer id) {
+		return cacheRestaurantes.computeIfAbsent(id, this::buscarRestaurantePor);
+	}
+	
+	private Usuario obterUsuario(Integer id) {
+		return cacheUsuarios.computeIfAbsent(id, this::buscarUsuarioPor);
+	}
+	
+	private Cupom obterCupom(Integer id) {
+		return cacheCupons.computeIfAbsent(id, this::buscarCupomPor);
+	}
+	
+	private Endereco obterEndereco(Integer id) {
+		return cacheEnderecos.computeIfAbsent(id, this::buscarEnderecoPor);
 	}
 }
