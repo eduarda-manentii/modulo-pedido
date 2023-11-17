@@ -9,12 +9,14 @@
 	<version>3.1.2</version>
 	<relativePath/>
   </parent>
-  <properties>
+<properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
 	<guava.version>32.1.2-jre</guava.version>	
 	<org-json.version>20200518</org-json.version>
+	<jjwt.version>0.11.5</jjwt.version>
+	<apache-camel.version>4.0.0-M3</apache-camel.version>
   </properties>
- <dependencies>
+  <dependencies>
    	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -54,7 +56,38 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+        <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+       <groupId>io.jsonwebtoken</groupId>
+       <artifactId>jjwt-impl</artifactId>
+       <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>   
+       <groupId>io.jsonwebtoken</groupId>
+       <artifactId>jjwt-jackson</artifactId>
+       <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+		<groupId>org.apache.camel.springboot</groupId>
+		<artifactId>camel-spring-boot-starter</artifactId>
+		<version>${apache-camel.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.camel.springboot</groupId>
+		<artifactId>camel-log-starter</artifactId>
+		<version>${apache-camel.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.camel.springboot</groupId>
+		<artifactId>camel-http-starter</artifactId>
+		<version>${apache-camel.version}</version>
+	</dependency>
   </dependencies>
+  
   <build>
 	<plugins>
 		<plugin>
