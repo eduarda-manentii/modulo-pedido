@@ -130,4 +130,9 @@ public class Pedido {
 		 this.data = LocalDateTime.now();
 		 this.novasOpcoes = new ArrayList<>();
 	}
+	
+	@Transient
+	public boolean isParaRetirada() {
+		return getRetirada() == Retirada.RETIRADA;
+	}
 }
