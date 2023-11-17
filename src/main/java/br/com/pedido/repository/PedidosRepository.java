@@ -1,5 +1,7 @@
 package br.com.pedido.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,37 +21,19 @@ public interface PedidosRepository extends JpaRepository<Pedido, Integer> {
 	@Query("UPDATE Pedido p SET p.status = :status WHERE p.id = :id")
 	void atualizarStatusPor(@Param("id") Integer idDoPedido, @Param("status") Status novoStatus);
 
-	@Query(value = "SELECT p "
-			+ "FROM Pedido p "
-			+ "WHERE p.status = :status",
-			countQuery = "SELECT Count(p) "
-			+ "FROM Pedido p "
-			+ "WHERE p.status = :status")
-	public Page<Pedido> listarPedidosPor(Status status, Pageable paginacao);
-
 	@Query(value = 
 			"SELECT p "
 			+ "FROM Pedido p "
-			+ "WHERE p.idRestaurante = :idRestaurante " 
+			+ "WHERE (:idRestaurante IS NULL OR p.idRestaurante = :idRestaurante) " 
 			+ "AND p.status = :status "
-			+ "AND p.retirada = :retirada order by p.data", 
+			+ "AND (:retirada IS NULL OR p.retirada = :retirada) order by p.data", 
 			countQuery = "SELECT Count(p) "
 						+ "FROM Pedido p "
-						+ "WHERE p.idRestaurante = :idRestaurante " 
+						+ "WHERE (:idRestaurante IS NULL OR p.idRestaurante = :idRestaurante) " 
 						+ "AND p.status = :status "
-						+ "AND p.retirada = :retirada")
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Retirada retirada, Pageable paginacao);
+						+ "AND (:retirada IS NULL OR p.retirada = :retirada) order by p.data DESC")
+	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, Optional<Retirada> retirada, Pageable paginacao);
 	
-	@Query(value = "SELECT p "
-			+ "FROM Pedido p "
-			+ "WHERE p.idRestaurante = :idRestaurante "
-			+ "AND p.status = :status", 
-			countQuery = "SELECT Count(p) "
-					+ " FROM Pedido p "
-					+ "WHERE p.idRestaurante = :idRestaurante "
-					+ "AND p.status = :status")
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao);
-
 	@Query("SELECT p "
 			+ "FROM Pedido p "
 			+ "JOIN FETCH p.opcoes op "

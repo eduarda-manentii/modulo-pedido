@@ -1,6 +1,7 @@
 package br.com.pedido.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -78,25 +79,59 @@ public class PedidoServiceImpl implements PedidoService {
 	public void atualizarStatusPor(Integer id, Status novoStatus) {
 	    Pedido pedidoEncontrado = repository.buscarPor(id);
 	    Preconditions.checkNotNull(pedidoEncontrado, "Não existe pedido para o id informado");
-	    Status statusAtual = pedidoEncontrado.getStatus();
-	    Preconditions.checkArgument(statusAtual != novoStatus, "O novo status é igual ao status atual");
-	    Preconditions.checkArgument(statusAtual.ordinal() < novoStatus.ordinal(),
-	            "O novo status não pode ser igual ou anterior ao status atual");
 
+	    Status statusAtual = pedidoEncontrado.getStatus();
+	    Preconditions.checkArgument(
+	            novoStatus.ordinal() >= statusAtual.ordinal(),
+	            "O novo status não pode ser anterior ao status atual");
+		boolean isTramitacaoLiberada = false;
+	    switch (statusAtual) {
+			case REALIZADO:
+				isTramitacaoLiberada = novoStatus.equals(Status.ACEITO_PELO_RESTAURANTE) || 
+						novoStatus.equals(Status.CANCELADO);
+				Preconditions.checkArgument(isTramitacaoLiberada, 
+						"Próximo status inválido para o status atual REALIZADO." 
+							+ "Próximo status esperado: ACEITO_PELO_RESTAURANTE ou CANCELADO.");
+				break;
+			case ACEITO_PELO_RESTAURANTE:
+				boolean isRetiradaBalcao = pedidoEncontrado.isParaRetirada();
+			    isTramitacaoLiberada = novoStatus.equals(Status.PRONTO_PARA_COLETA) || isRetiradaBalcao;
+			    if (!isRetiradaBalcao) {
+			    	Preconditions.checkArgument(isTramitacaoLiberada, 
+							"Próximo status inválido para o status atual ACEITO_PELO_RESTAURANTE." 
+								+ " Próximo status esperado: PRONTO_PARA_COLETA.");
+				} else {
+				Preconditions.checkArgument(isTramitacaoLiberada, 
+						"Próximo status inválido para o status atual ACEITO_PELO_RESTAURANTE." 
+							+ " Próximo status esperado: PRONTO_PARA_COLETA ou ENTREGUE.");
+				}
+				break;
+			case PRONTO_PARA_COLETA:
+			 isTramitacaoLiberada = novoStatus.equals(Status.ACEITO_PARA_ENTREGA);
+				Preconditions.checkArgument(isTramitacaoLiberada,
+						"Próximo status inválido para o status atual PRONTO_PARA_COLETA. "
+							+ "Próximo status esperado: ACEITO_PARA_ENTREGA.");
+				break;
+			case ACEITO_PARA_ENTREGA:
+				isTramitacaoLiberada = novoStatus.equals(Status.ENTREGUE);
+				Preconditions.checkArgument(isTramitacaoLiberada,
+						"Próximo status inválido para o status atual ACEITO_PARA_ENTREGA. "
+							+ "Próximo status esperado: ENTREGUE.");
+				break;
+			case ENTREGUE:
+				throw new IllegalArgumentException("Não é permitido alterar o status a partir de 'ENTREGUE'");
+			default:
+				break;
+		}
 	    repository.atualizarStatusPor(id, novoStatus);
 	}
-
-
+	
 	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Retirada retirada, Pageable paginacao) {
+	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, 
+			Optional<Retirada> retirada, Optional<Integer> resumo, Pageable paginacao) {
 		return repository.listarPor(idRestaurante, status, retirada, paginacao);
 	}
 
-	@Override
-	public Page<Pedido> listarPor(Integer idRestaurante, Status status, Pageable paginacao) {
-		return repository.listarPor(idRestaurante, status, paginacao);
-	}
-	
 	@Override
 	public Pedido buscarPor(Integer id) {
 		Pedido pedidoEncontrado = repository.buscarPor(id);
@@ -104,11 +139,5 @@ public class PedidoServiceImpl implements PedidoService {
 				"Não existe pedido para o id informado");
 		return pedidoEncontrado;
 	}
-
-	@Override
-	public Page<Pedido> listarPedidosPor(Status status, Pageable paginacao) {
-		return repository.listarPedidosPor(status, paginacao);
-	}
-
 
 }

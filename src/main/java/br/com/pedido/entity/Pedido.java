@@ -60,22 +60,22 @@ public class Pedido {
 	private Pagamento pagamento;
 	
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor total não pode ser inferior a 0.0")
-	//@Digits(integer = 2, fraction = 2, message = "O valor total deve possuir o formato 'NN.NN'")
+	@Digits(integer = 9, fraction = 2, message = "O valor total deve possuir o formato 'NNNNNNNNN.NN'")
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor de desconto não pode ser inferior a 0.0")
-	@Digits(integer = 2, fraction = 2, message = "O valor de desconto deve possuir o formato 'NN.NN'")
+	@Digits(integer = 9, fraction = 2, message = "O valor de desconto deve possuir o formato 'NNNNNNNNN.NN'")
 	@Column(name = "valor_desconto")
 	private BigDecimal valorDesconto;
 	
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor dos itens não pode ser inferior a 0.0")
-	@Digits(integer = 2, fraction = 2, message = "O valor dos itens deve possuir o formato 'NN.NN'")
+	@Digits(integer = 9, fraction = 2, message = "O valor dos itens deve possuir o formato 'NNNNNNNNN.NN'")
 	@Column(name = "valor_itens")
 	private BigDecimal valorItens;
 	
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor do frete não pode ser inferior a 0.0")
-	@Digits(integer = 2, fraction = 2, message = "O valor do frete deve possuir o formato 'NN.NN'")
+	@Digits(integer = 9, fraction = 2, message = "O valor do frete deve possuir o formato 'NNNNNNNNN.NN'")
 	@Column(name = "valor_frete")
 	private BigDecimal valorFrete;
 	
@@ -129,5 +129,10 @@ public class Pedido {
 		 this.opcoes = new ArrayList<OpcaoDoPedido>();
 		 this.data = LocalDateTime.now();
 		 this.novasOpcoes = new ArrayList<>();
+	}
+	
+	@Transient
+	public boolean isParaRetirada() {
+		return getRetirada() == Retirada.RETIRADA;
 	}
 }
