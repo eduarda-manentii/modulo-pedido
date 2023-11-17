@@ -81,14 +81,17 @@ public class PedidoServiceProxy implements PedidoService {
 	}
 
 	@Override
-	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, Optional<Retirada> retirada, Pageable paginacao) {
-		Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, paginacao);
-		for (Pedido pedido : pagina.getContent()) {
-			pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
-			pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
-			pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
-			pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
-			pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
+	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, 
+			Optional<Retirada> retirada, Optional<Integer> resumo, Pageable paginacao) {
+		Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, resumo, paginacao);
+		if (resumo.isEmpty() || resumo.get() == 0) {
+			for (Pedido pedido : pagina.getContent()) {
+				pedido.setRestaurante(buscarRestaurantePor(pedido.getIdRestaurante()));
+				pedido.setCliente(buscarClientePor(pedido.getIdCliente()));
+				pedido.setCupom(buscarCupomPor(pedido.getIdCupom()));
+				pedido.setEndereco(buscarEnderecoPor(pedido.getIdEndereco()));
+				pedido.setUsuario(buscarUsuarioPor(pedido.getIdCliente()));
+			}
 		}
 		return pagina;
 	}

@@ -32,6 +32,7 @@ public interface PedidoService {
 			@NotNull(message = "O status é obrigatorio")
 			Status status,
 			Optional<Retirada> retirada,
+			Optional<Integer> resumo,
 			Pageable paginacao);
 	
 	public Pedido buscarPor(

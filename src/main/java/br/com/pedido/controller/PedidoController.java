@@ -67,7 +67,7 @@ public class PedidoController {
 		} else {
 			paginacao = PageRequest.of(0, 15);
 		}
-		Page<Pedido> page = service.listarPor(idDoRestaurante, status, retirada, paginacao);;
+		Page<Pedido> page = service.listarPor(idDoRestaurante, status, retirada, resumo, paginacao);;
 		Map<String, Object> pageMap = new HashMap<String, Object>();
 		pageMap.put("paginacaoAtual", page.getNumber());
 		pageMap.put("totalDeItens", page.getTotalElements());
@@ -157,7 +157,6 @@ public class PedidoController {
 		pedidoMap.put("opcoes", opcoesMap);
 		return pedidoMap;
 	}
-	
 	
 	private Map<String, Object> converterResumido(Pedido pedido) {
 		Map<String, Object> pedidoMap = new HashMap<String, Object>();
