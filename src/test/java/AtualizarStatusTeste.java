@@ -1,42 +1,51 @@
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import br.com.pedido.InitApp;
 import br.com.pedido.entity.Pedido;
 import br.com.pedido.entity.enums.Status;
 import br.com.pedido.repository.PedidosRepository;
 import br.com.pedido.service.impl.PedidoServiceImpl;
 
+@SpringBootTest(classes = InitApp.class)
 public class AtualizarStatusTeste {
-	
-	@Autowired
+
+    @InjectMocks
     private PedidoServiceImpl service;
-    
-	@Autowired
+
+    @Mock
     private PedidosRepository repository;
-	
-	@Test
-	public void atualizarStatus() {
-		
-		int idPedido = 66;
-        Status statusAtual = Status.REALIZADO; 
-        Status novoStatus = Status.ACEITO_PELO_RESTAURANTE;
 
-        assertDoesNotThrow(() -> service.atualizarStatusPor(idPedido, novoStatus));
+    @Test
+    public void testAtualizarStatusPorPedidoExistente() {
+        Integer idPedido = 70;
+        Status novoStatus = Status.ACEITO_PELO_RESTAURANTE;  
 
-        Pedido pedidoAtualizado = repository.buscarPor(idPedido);
-        assertNotNull(pedidoAtualizado);
-        assertEquals(novoStatus, pedidoAtualizado.getStatus());
+        Pedido pedidoEncontrado = new Pedido();
+        pedidoEncontrado.setId(idPedido);
+        pedidoEncontrado.setStatus(Status.ACEITO_PELO_RESTAURANTE);  
+        when(repository.buscarPor(idPedido)).thenReturn(pedidoEncontrado);
 
-        assertNotEquals(statusAtual, novoStatus, "O status atual não deve ser igual ao novo status");
-        assertTrue(statusAtual.ordinal() < novoStatus.ordinal(), "O novo status deve ser uma progressão válida do status atual");
+        service.atualizarStatusPor(idPedido, novoStatus);
 
-		
-	}
+        verify(repository, times(1)).atualizarStatusPor(idPedido, novoStatus);
 
+        assertEquals(novoStatus, pedidoEncontrado.getStatus());
+    }
+    
+    @Test
+    public void testBuscarPorPedidoNaoExistente() {
+        assertThrows(NullPointerException.class, () -> {
+            service.buscarPor(1);
+        });
+    }
 }
