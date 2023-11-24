@@ -47,6 +47,9 @@ public class PedidoServiceProxy implements PedidoService {
 	@Autowired
 	private ProducerTemplate fromEndereco;
 	
+	@Autowired
+	private ProducerTemplate fromLogistica;
+	
 	private Map<Integer, Cliente> cacheClientes = new HashMap<>();
 	private Map<Integer, Restaurante> cacheRestaurantes = new HashMap<>();
 	private Map<Integer, Usuario> cacheUsuarios = new HashMap<>();
@@ -79,6 +82,17 @@ public class PedidoServiceProxy implements PedidoService {
 		cupom.setId(cupomEncontrado.getInt("id"));
 		cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
 		cupom.setStatus(cupomEncontrado.getString("status"));
+		
+		Endereco enderecoEncontrado = buscarEnderecoPor(novoPedido.getIdEndereco());
+		Restaurante restauranteEncontrado = buscarRestaurantePor(novoPedido.getIdRestaurante());
+		JSONObject requestValorFrete = new JSONObject();
+		requestValorFrete.put("cepRestaurante", restauranteEncontrado.getCep());
+		requestValorFrete.put("cepEndereco", enderecoEncontrado.getCep());
+		JSONObject valorFreteEncontrado = fromOpcao.requestBody("direct:receberValorFrete", requestValorFrete,
+				JSONObject.class);
+		
+		novoPedido.setValorFrete(valorFreteEncontrado.getBigDecimal("valor"));
+		
 		novoPedido.setCupom(cupom);
 		return service.salvar(novoPedido);
 	}
@@ -123,7 +137,7 @@ public class PedidoServiceProxy implements PedidoService {
 		Restaurante restaurante = new Restaurante();
 		restaurante.setId(restauranteJson.getInt("id"));
 		restaurante.setNome(restauranteJson.getString("nome"));
-
+		restaurante.setCep(restauranteJson.getInt("cep"));
 		return restaurante;
 	}
 
