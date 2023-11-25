@@ -59,6 +59,7 @@ public class PedidoController {
 	public ResponseEntity<?> listarPor(@RequestParam(name = "id-restaurante") Optional<Integer> idDoRestaurante,
 			@RequestParam(name = "status") Status status,
 			@RequestParam(name = "retirada") Optional<Retirada> retirada,
+			@RequestParam(name = "id-ultimo-pedido") Optional<Integer> idUltimoPedido,
 			@RequestParam(name = "pagina") Optional<Integer> pagina,
 			@RequestParam(name = "resumo") Optional<Integer> resumo) {
 		Pageable paginacao = null;
@@ -67,7 +68,7 @@ public class PedidoController {
 		} else {
 			paginacao = PageRequest.of(0, 15);
 		}
-		Page<Pedido> page = service.listarPor(idDoRestaurante, status, retirada, resumo, paginacao);;
+		Page<Pedido> page = service.listarPor(idDoRestaurante, status, retirada, resumo, idUltimoPedido, paginacao);;
 		Map<String, Object> pageMap = new HashMap<String, Object>();
 		pageMap.put("paginacaoAtual", page.getNumber());
 		pageMap.put("totalDeItens", page.getTotalElements());
@@ -119,6 +120,7 @@ public class PedidoController {
 		Map<String, Object> restauranteMap = new HashMap<String, Object>();
 		restauranteMap.put("id_restaurante", pedido.getRestaurante().getId());
 		restauranteMap.put("nome", pedido.getRestaurante().getNome());
+		restauranteMap.put("cep", pedido.getEnderecoRestaurante().getCep());
 		pedidoMap.put("restaurante", restauranteMap);
 
 		Map<String, Object> clienteMap = new HashMap<String, Object>();

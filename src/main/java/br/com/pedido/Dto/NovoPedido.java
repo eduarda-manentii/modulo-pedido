@@ -62,8 +62,14 @@ public class NovoPedido {
 	@NotNull(message = "O endereço é obrigatório.")
 	private Integer idEndereco;
 	
+	@Transient
+	private Endereco endereco;
+	
 	@NotNull(message = "O restaurante é obrigatório.")
 	private Integer idRestaurante;
+	
+	@Transient
+	private Restaurante restaurante;
 	
 	@NotNull(message = "O id do cardápio é obrigatório.")
 	private Integer idDoCardapio;	

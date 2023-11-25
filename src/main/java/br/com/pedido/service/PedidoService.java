@@ -33,6 +33,7 @@ public interface PedidoService {
 			Status status,
 			Optional<Retirada> retirada,
 			Optional<Integer> resumo,
+			Optional<Integer> idUltimoPedido,
 			Pageable paginacao);
 	
 	public Pedido buscarPor(

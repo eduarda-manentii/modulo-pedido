@@ -17,4 +17,7 @@ public class Restaurante {
 	@NotBlank(message = "O nome é obrigatório")
 	private String nome;
 	
+	@NotNull(message = "O endereço não pode ser nulo")
+	private Endereco endereco;
+	
 }
