@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.util.json.JsonObject;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import br.com.pedido.Dto.Cliente;
 import br.com.pedido.Dto.Cupom;
 import br.com.pedido.Dto.Endereco;
+import br.com.pedido.Dto.EnderecoRestaurante;
 import br.com.pedido.Dto.NovaOpcaoDoPedido;
 import br.com.pedido.Dto.NovoPedido;
 import br.com.pedido.Dto.Restaurante;
@@ -55,6 +57,7 @@ public class PedidoServiceProxy implements PedidoService {
 	private Map<Integer, Usuario> cacheUsuarios = new HashMap<>();
 	private Map<Integer, Cupom> cacheCupons = new HashMap<>();
 	private Map<Integer, Endereco> cacheEnderecos = new HashMap<>();
+	private Map<Integer, EnderecoRestaurante> cacheEnderecosRestaurantes = new HashMap<>();
 
 	@Override
 	public Pedido salvar(NovoPedido novoPedido) {
@@ -82,17 +85,17 @@ public class PedidoServiceProxy implements PedidoService {
 		cupom.setId(cupomEncontrado.getInt("id"));
 		cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
 		cupom.setStatus(cupomEncontrado.getString("status"));
-		
-		Endereco enderecoEncontrado = buscarEnderecoPor(novoPedido.getIdEndereco());
-		Restaurante restauranteEncontrado = buscarRestaurantePor(novoPedido.getIdRestaurante());
+		/*
+		Endereco enderecoClienteEncontrado = obterEndereco(novoPedido.getIdEndereco());
+		EnderecoRestaurante enderecoRestauranteEncontrado = obterEnderecoRestaurante(novoPedido.getIdRestaurante());
 		JSONObject requestValorFrete = new JSONObject();
-		requestValorFrete.put("cepRestaurante", restauranteEncontrado.getCep());
-		requestValorFrete.put("cepEndereco", enderecoEncontrado.getCep());
+		requestValorFrete.put("cepRestaurante", enderecoRestauranteEncontrado.getCep());
+		requestValorFrete.put("cepEndereco", enderecoClienteEncontrado.getCep());
 		JSONObject valorFreteEncontrado = fromOpcao.requestBody("direct:receberValorFrete", requestValorFrete,
 				JSONObject.class);
 		
 		novoPedido.setValorFrete(valorFreteEncontrado.getBigDecimal("valor"));
-		
+		*/
 		novoPedido.setCupom(cupom);
 		return service.salvar(novoPedido);
 	}
@@ -104,8 +107,8 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Override
 	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status,
-	        Optional<Retirada> retirada, Optional<Integer> resumo, Pageable paginacao) {
-	    Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, resumo, paginacao);
+	        Optional<Retirada> retirada, Optional<Integer> resumo, Optional<Integer> idUltimoPedido, Pageable paginacao) {
+	    Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, resumo, idUltimoPedido, paginacao);
 	    if (resumo.isEmpty() || resumo.get() == 0) {
 	        for (Pedido pedido : pagina.getContent()) {
 	            carregarInformacoesExtras(pedido);
@@ -127,6 +130,7 @@ public class PedidoServiceProxy implements PedidoService {
 	    pedido.setCupom(obterCupom(pedido.getIdCupom()));
 	    pedido.setEndereco(obterEndereco(pedido.getIdEndereco()));
 	    pedido.setUsuario(obterUsuario(pedido.getIdCliente()));
+	    pedido.setEnderecoRestaurante(obterEnderecoRestaurante(pedido.getRestaurante().getId()));
 	}
 
 	private Restaurante buscarRestaurantePor(Integer id) {
@@ -136,10 +140,24 @@ public class PedidoServiceProxy implements PedidoService {
 				JSONObject.class);
 		Restaurante restaurante = new Restaurante();
 		restaurante.setId(restauranteJson.getInt("id"));
-		restaurante.setNome(restauranteJson.getString("nome"));
-		restaurante.setCep(restauranteJson.getInt("cep"));
+		restaurante.setNome(restauranteJson.getString("nome"));		
 		return restaurante;
 	}
+	
+	private EnderecoRestaurante buscarEnderecoRestaurantePor(Integer id) {
+		JSONObject requestBodyRestaurante = new JSONObject();
+		requestBodyRestaurante.put("idRestaurante", id);
+		JSONObject restauranteJson = fromRestaurante.requestBody("direct:receberRestaurante", requestBodyRestaurante,
+				JSONObject.class);
+		EnderecoRestaurante endereco = new EnderecoRestaurante();
+		JSONObject enderecoJson = restauranteJson.getJSONObject("endereco");
+		endereco.setCep(enderecoJson.getInt("cep"));
+		endereco.setBairro(enderecoJson.getString("bairro"));
+		endereco.setCidade(enderecoJson.getString("cidade"));
+		endereco.setLogradouro(enderecoJson.getString("logradouro"));
+		
+		return endereco;
+	} 
 
 	private Cliente buscarClientePor(Integer id) {
 		JSONObject requestBodyCliente = new JSONObject();
@@ -163,6 +181,8 @@ public class PedidoServiceProxy implements PedidoService {
 
 		return usuario;
 	}
+	
+	
 
 	private Cupom buscarCupomPor(Integer id) {
 		JSONObject requestBodyCupom = new JSONObject();
@@ -215,4 +235,9 @@ public class PedidoServiceProxy implements PedidoService {
 	private Endereco obterEndereco(Integer id) {
 		return cacheEnderecos.computeIfAbsent(id, this::buscarEnderecoPor);
 	}
+	
+	private EnderecoRestaurante obterEnderecoRestaurante(Integer id) {
+		return cacheEnderecosRestaurantes.computeIfAbsent(id, this::buscarEnderecoRestaurantePor);
+	} 
+	
 }

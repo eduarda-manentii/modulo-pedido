@@ -17,7 +17,7 @@ public class Restaurante {
 	@NotBlank(message = "O nome é obrigatório")
 	private String nome;
 	
-	@Size(max = 8, min = 8, message = "O cep deve conter 8 digitos")
-	private Integer cep;
+	@NotNull(message = "O endereço não pode ser nulo")
+	private Endereco endereco;
 	
 }

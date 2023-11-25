@@ -1,4 +1,4 @@
-package br.com.pedido.integration.router;
+/*package br.com.pedido.integration.router;
 
 import java.io.Serializable;
 
@@ -52,3 +52,4 @@ public class FromAutenticacaoLogistica extends RouteBuilder implements Serializa
 	
 	
 }
+*/

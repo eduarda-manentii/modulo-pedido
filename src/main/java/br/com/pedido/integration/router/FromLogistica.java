@@ -1,4 +1,4 @@
-package br.com.pedido.integration.router;
+/*package br.com.pedido.integration.router;
 
 import java.io.Serializable;
 
@@ -67,4 +67,4 @@ public class FromLogistica extends RouteBuilder implements Serializable {
 				.end();
 	}
 
-}
+}*/

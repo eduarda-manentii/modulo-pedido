@@ -8,6 +8,7 @@ import java.util.List;
 import br.com.pedido.Dto.Cliente;
 import br.com.pedido.Dto.Cupom;
 import br.com.pedido.Dto.Endereco;
+import br.com.pedido.Dto.EnderecoRestaurante;
 import br.com.pedido.Dto.NovaOpcaoDoPedido;
 import br.com.pedido.Dto.Restaurante;
 import br.com.pedido.Dto.Usuario;
@@ -113,6 +114,8 @@ public class Pedido {
 	@Transient
 	private Restaurante restaurante;
 	
+	@Transient
+	private EnderecoRestaurante enderecoRestaurante;
 	
 	@Column(name = "data")
 	private LocalDateTime data;
