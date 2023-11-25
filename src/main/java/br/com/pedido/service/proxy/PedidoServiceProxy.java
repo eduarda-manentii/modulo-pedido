@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.util.json.JsonObject;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,9 +48,6 @@ public class PedidoServiceProxy implements PedidoService {
 	@Autowired
 	private ProducerTemplate fromEndereco;
 	
-	@Autowired
-	private ProducerTemplate fromLogistica;
-	
 	private Map<Integer, Cliente> cacheClientes = new HashMap<>();
 	private Map<Integer, Restaurante> cacheRestaurantes = new HashMap<>();
 	private Map<Integer, Usuario> cacheUsuarios = new HashMap<>();
@@ -85,18 +81,8 @@ public class PedidoServiceProxy implements PedidoService {
 		cupom.setId(cupomEncontrado.getInt("id"));
 		cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
 		cupom.setStatus(cupomEncontrado.getString("status"));
-		/*
-		Endereco enderecoClienteEncontrado = obterEndereco(novoPedido.getIdEndereco());
-		EnderecoRestaurante enderecoRestauranteEncontrado = obterEnderecoRestaurante(novoPedido.getIdRestaurante());
-		JSONObject requestValorFrete = new JSONObject();
-		requestValorFrete.put("cepRestaurante", enderecoRestauranteEncontrado.getCep());
-		requestValorFrete.put("cepEndereco", enderecoClienteEncontrado.getCep());
-		JSONObject valorFreteEncontrado = fromOpcao.requestBody("direct:receberValorFrete", requestValorFrete,
-				JSONObject.class);
-		
-		novoPedido.setValorFrete(valorFreteEncontrado.getBigDecimal("valor"));
-		*/
 		novoPedido.setCupom(cupom);
+
 		return service.salvar(novoPedido);
 	}
 
