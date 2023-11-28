@@ -108,11 +108,11 @@ public class PedidoController {
 		pedidoMap.put("data_pedido", dataFormatada + " - " + horaFormatada);
 		pedidoMap.put("pagamento", pedido.getPagamento());
 		pedidoMap.put("opcoes", pedido.getOpcoes());
-		pedidoMap.put("tipo de entrega", pedido.getRetirada());
+		pedidoMap.put("tipo_entrega", pedido.getRetirada());
 		pedidoMap.put("status", pedido.getStatus());
-		pedidoMap.put("valor total", pedido.getValorTotal());
-		pedidoMap.put("valor do frete", pedido.getValorFrete());
-		pedidoMap.put("valor dos itens", pedido.getValorItens());
+		pedidoMap.put("valor_total", pedido.getValorTotal());
+		pedidoMap.put("valor_do_frete", pedido.getValorFrete());
+		pedidoMap.put("valor_dos_itens", pedido.getValorItens());
 		pedidoMap.put("desconto", pedido.getValorDesconto());
 		pedidoMap.put("opcoes", pedido.getOpcoes());
 		pedidoMap.put("id_cardapio", pedido.getIdCardapio());
@@ -121,6 +121,9 @@ public class PedidoController {
 		restauranteMap.put("id_restaurante", pedido.getRestaurante().getId());
 		restauranteMap.put("nome", pedido.getRestaurante().getNome());
 		restauranteMap.put("cep", pedido.getEnderecoRestaurante().getCep());
+		restauranteMap.put("cidade", pedido.getEnderecoRestaurante().getCidade());
+		restauranteMap.put("bairro", pedido.getEnderecoRestaurante().getBairro());
+		restauranteMap.put("rua", pedido.getEnderecoRestaurante().getLogradouro());
 		pedidoMap.put("restaurante", restauranteMap);
 
 		Map<String, Object> clienteMap = new HashMap<String, Object>();
@@ -131,10 +134,11 @@ public class PedidoController {
 		
 		Map<String, Object> enderecoMap = new HashMap<String, Object>();
 		enderecoMap.put("id_endereco", pedido.getEndereco().getId());
-		enderecoMap.put("CEP", pedido.getEndereco().getCep());
+		enderecoMap.put("cep", pedido.getEndereco().getCep());
 		enderecoMap.put("estado", pedido.getEndereco().getEstado());
 		enderecoMap.put("cidade", pedido.getEndereco().getCidade());
 		enderecoMap.put("bairro", pedido.getEndereco().getBairro());
+		enderecoMap.put("rua", pedido.getEndereco().getRua());
 		enderecoMap.put("numero", pedido.getEndereco().getNumero());;
 		enderecoMap.put("complemento", pedido.getEndereco().getComplemento());
 		pedidoMap.put("endereco", enderecoMap);
