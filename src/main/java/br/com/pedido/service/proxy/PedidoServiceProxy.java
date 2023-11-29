@@ -140,6 +140,7 @@ public class PedidoServiceProxy implements PedidoService {
 		endereco.setCep(enderecoJson.getInt("cep"));
 		endereco.setBairro(enderecoJson.getString("bairro"));
 		endereco.setCidade(enderecoJson.getString("cidade"));
+		endereco.setLogradouro(enderecoJson.getString("logradouro"));
 		
 		return endereco;
 	} 
