@@ -1,6 +1,7 @@
 package br.com.pedido.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,12 @@ public class PedidoServiceImpl implements PedidoService {
 	    pedido.setIdCardapio(novoPedido.getIdDoCardapio());
 	    
 	    BigDecimal frete = novoPedido.getValorFrete();
-	    pedido.setValorFrete(frete);
+	    BigDecimal freteArredondado = frete.setScale(1, RoundingMode.HALF_UP);
+	    pedido.setValorFrete(freteArredondado);
 	    
 	    BigDecimal valorItens = novoPedido.getValorItens();
 	    pedido.setValorItens(valorItens);
-	    BigDecimal subtotal = valorItens.add(frete);
+	    BigDecimal subtotal = valorItens.add(freteArredondado);
 	    
 	    BigDecimal porcentagemDesconto = pedido.getCupom().getValor();
 	    BigDecimal desconto = (porcentagemDesconto.multiply(subtotal)).divide(new BigDecimal(100));

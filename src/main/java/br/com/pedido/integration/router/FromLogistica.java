@@ -1,4 +1,4 @@
-/*package br.com.pedido.integration.router;
+package br.com.pedido.integration.router;
 
 import java.io.Serializable;
 
@@ -18,9 +18,10 @@ public class FromLogistica extends RouteBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Value("${****}")
+	@Value("${logistica.url}")
 	private String urlDeEnvio;
 
+	/*
 	@Value("${***************}")
 	private String urlDeToken;
 
@@ -29,6 +30,7 @@ public class FromLogistica extends RouteBuilder implements Serializable {
 
 	@Value("${******************}")
 	private String senha;
+	*/
 
 	@Autowired
 	private ErrorProcessor errorProcessor;
@@ -42,17 +44,21 @@ public class FromLogistica extends RouteBuilder implements Serializable {
 					public void process(Exchange exchange) throws Exception {
 						String responseJson = exchange.getIn().getBody(String.class);
 						JSONObject jsonObject = new JSONObject(responseJson);
-						Integer cepRestaurante = jsonObject.getInt("cepRestaurante");
-						Integer cepEndereco = jsonObject.getInt(responseJson);
-						exchange.setProperty("cepRestaurante", cepRestaurante);
-						exchange.setProperty("cepEndereco", cepEndereco);
+						String cepRestaurante = jsonObject.getString("cepDeOrigem");
+						String cepEndereco = jsonObject.getString("cepDeDestino");
+						exchange.setProperty("cepDeOrigem", cepRestaurante);
+						exchange.setProperty("cepDeDestino", cepEndereco);
+											
 					}
 				})
-				.to("direct:autenticarLogistica")
+				/*.to("direct:autenticarLogistica")
 				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
 				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))
-				.toD(urlDeEnvio + "****************************************************")
+				*/
+				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
+				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
+				.toD(urlDeEnvio + "/frete/cepDeOrigem/${exchangeProperty.cepDeOrigem}/cepDeDestino/${exchangeProperty.cepDeDestino}")
 				.process(new Processor() {
 
 					@Override
@@ -67,4 +73,4 @@ public class FromLogistica extends RouteBuilder implements Serializable {
 				.end();
 	}
 
-}*/
+}

@@ -16,5 +16,5 @@ public class EnderecoRestaurante {
 	private String bairro;
 	
 	@NotBlank(message = "O cep é obrigatório")
-	private Integer cep;
+	private String cep;
 }
