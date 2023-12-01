@@ -48,6 +48,9 @@ public class PedidoServiceProxy implements PedidoService {
 	@Autowired
 	private ProducerTemplate fromEndereco;
 	
+	@Autowired
+	private ProducerTemplate fromLogistica;
+	
 	private Map<Integer, Cliente> cacheClientes = new HashMap<>();
 	private Map<Integer, Restaurante> cacheRestaurantes = new HashMap<>();
 	private Map<Integer, Usuario> cacheUsuarios = new HashMap<>();
@@ -81,6 +84,18 @@ public class PedidoServiceProxy implements PedidoService {
 		cupom.setId(cupomEncontrado.getInt("id"));
 		cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
 		cupom.setStatus(cupomEncontrado.getString("status"));
+		
+		Endereco enderecoClienteEncontrado = obterEndereco(novoPedido.getIdEndereco());
+		EnderecoRestaurante enderecoRestauranteEncontrado = obterEnderecoRestaurante(novoPedido.getIdRestaurante());
+		JSONObject requestValorFrete = new JSONObject();
+		
+		requestValorFrete.put("cepDeOrigem", enderecoRestauranteEncontrado.getCep());
+		requestValorFrete.put("cepDeDestino", enderecoClienteEncontrado.getCep());		
+		JSONObject valorFreteEncontrado = fromLogistica.requestBody("direct:receberValorFrete", requestValorFrete,
+				JSONObject.class);		
+		novoPedido.setValorFrete(valorFreteEncontrado.getBigDecimal("custo"));
+		
+
 		novoPedido.setCupom(cupom);
 
 		return service.salvar(novoPedido);
@@ -137,7 +152,7 @@ public class PedidoServiceProxy implements PedidoService {
 				JSONObject.class);
 		EnderecoRestaurante endereco = new EnderecoRestaurante();
 		JSONObject enderecoJson = restauranteJson.getJSONObject("endereco");
-		endereco.setCep(enderecoJson.getInt("cep"));
+		endereco.setCep(enderecoJson.getString("cep"));
 		endereco.setBairro(enderecoJson.getString("bairro"));
 		endereco.setCidade(enderecoJson.getString("cidade"));
 		endereco.setLogradouro(enderecoJson.getString("logradouro"));

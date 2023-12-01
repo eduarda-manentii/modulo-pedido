@@ -14,45 +14,50 @@ import org.springframework.stereotype.Component;
 import br.com.pedido.integration.processor.ErrorProcessor;
 
 @Component
-public class FromEndereco extends RouteBuilder implements Serializable {
+public class FromLogistica extends RouteBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Value("${cadastros.url}")
+	@Value("${logistica.url}")
 	private String urlDeEnvio;
 
-	@Value("${cadastros.url.token}")
+	
+	@Value("${logistica.url.token}")
 	private String urlDeToken;
 
-	@Value("${cadastros.login}")
+	@Value("${logistica.login}")
 	private String login;
 
-	@Value("${cadastros.password}")
+	@Value("${logistica.password}")
 	private String senha;
+	
 
 	@Autowired
 	private ErrorProcessor errorProcessor;
 
 	@Override
 	public void configure() throws Exception {
-		from("direct:receberEndereco").doTry().setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
-				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
-				.process(new Processor() {
+		from("direct:receberValorFrete")
+				.doTry()
+				.process(new Processor() {					
 					@Override
 					public void process(Exchange exchange) throws Exception {
 						String responseJson = exchange.getIn().getBody(String.class);
 						JSONObject jsonObject = new JSONObject(responseJson);
-						Integer idEndereco = jsonObject.getInt("idEndereco");
-						exchange.setProperty("idEndereco", idEndereco);
-
+						String cepRestaurante = jsonObject.getString("cepDeOrigem");
+						String cepEndereco = jsonObject.getString("cepDeDestino");
+						exchange.setProperty("cepDeOrigem", cepRestaurante);
+						exchange.setProperty("cepDeDestino", cepEndereco);
+											
 					}
 				})
-				.to("direct:autenticarCadastros")
+				.to("direct:autenticarLogistica")
 				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
-				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))
-				.toD(urlDeEnvio + "/enderecos/id/${exchangeProperty.idEndereco}")
+				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))							
+				.toD(urlDeEnvio + "/frete/cepDeOrigem/${exchangeProperty.cepDeOrigem}/cepDeDestino/${exchangeProperty.cepDeDestino}")
 				.process(new Processor() {
+
 					@Override
 					public void process(Exchange exchange) throws Exception {
 						String responseJson = exchange.getIn().getBody(String.class);

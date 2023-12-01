@@ -14,7 +14,7 @@ public class Frete {
 
 
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor deve ser positivo")
-	@Digits(integer = 9, fraction = 2, message = "O valor de possuir o formato 'NNNNNNNNN.NN'")
+	@Digits(integer = 9, fraction = 1, message = "O valor de possuir o formato 'NNNNNNNNN.N'")
 	@NotNull(message = "O valor do frete é obrigatório")
 	private BigDecimal valor;
 	
