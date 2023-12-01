@@ -21,16 +21,16 @@ public class FromLogistica extends RouteBuilder implements Serializable {
 	@Value("${logistica.url}")
 	private String urlDeEnvio;
 
-	/*
-	@Value("${***************}")
+	
+	@Value("${logistica.url.token}")
 	private String urlDeToken;
 
-	@Value("${******************}")
+	@Value("${logistica.login}")
 	private String login;
 
-	@Value("${******************}")
+	@Value("${logistica.password}")
 	private String senha;
-	*/
+	
 
 	@Autowired
 	private ErrorProcessor errorProcessor;
@@ -51,13 +51,10 @@ public class FromLogistica extends RouteBuilder implements Serializable {
 											
 					}
 				})
-				/*.to("direct:autenticarLogistica")
+				.to("direct:autenticarLogistica")
 				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
-				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))
-				*/
-				.setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
-				.setHeader(Exchange.CONTENT_TYPE, constant("application/json;charset=UTF-8"))
+				.setHeader("Authorization", simple("Bearer ${exchangeProperty.token}"))							
 				.toD(urlDeEnvio + "/frete/cepDeOrigem/${exchangeProperty.cepDeOrigem}/cepDeDestino/${exchangeProperty.cepDeDestino}")
 				.process(new Processor() {
 

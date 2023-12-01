@@ -1,4 +1,4 @@
-/*package br.com.pedido.integration.router;
+package br.com.pedido.integration.router;
 
 import java.io.Serializable;
 
@@ -15,13 +15,13 @@ public class FromAutenticacaoLogistica extends RouteBuilder implements Serializa
 	
 	private static final long serialVersionUID = 1L;	
 
-	@Value("${mktplace.url.token}")
+	@Value("${logistica.url.token}")
 	private String urlDeToken;
 
-	@Value("${*************}")
+	@Value("${logistica.login}")
 	private String login;
 
-	@Value("${***********}")
+	@Value("${logistica.password}")
 	private String senha;
 	
 	@Override
@@ -52,4 +52,3 @@ public class FromAutenticacaoLogistica extends RouteBuilder implements Serializa
 	
 	
 }
-*/
