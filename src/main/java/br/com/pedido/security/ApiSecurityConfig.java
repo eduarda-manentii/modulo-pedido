@@ -73,6 +73,9 @@ public class ApiSecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http		
 		.csrf(csrf -> csrf.disable())
+		 .cors()
+		 .configurationSource(urlBasedCorsConfigurationSource()) // Use the cors configuration here
+		 .and()
 			.authorizeHttpRequests((request) -> 
 				request
 					.requestMatchers("/auth/**")
