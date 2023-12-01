@@ -74,7 +74,7 @@ public class ApiSecurityConfig {
 		http		
 		.csrf(csrf -> csrf.disable())
 		 .cors()
-		 .configurationSource(urlBasedCorsConfigurationSource()) // Use the cors configuration here
+		 .configurationSource(urlBasedCorsConfigurationSource())
 		 .and()
 			.authorizeHttpRequests((request) -> 
 				request
