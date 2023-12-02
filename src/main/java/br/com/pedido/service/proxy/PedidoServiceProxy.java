@@ -24,6 +24,7 @@ import br.com.pedido.Dto.Usuario;
 import br.com.pedido.entity.Pedido;
 import br.com.pedido.entity.enums.Retirada;
 import br.com.pedido.entity.enums.Status;
+import br.com.pedido.exception.BusinessException;
 import br.com.pedido.service.PedidoService;
 
 @Service
@@ -77,26 +78,37 @@ public class PedidoServiceProxy implements PedidoService {
 			nop.setSubtotal(subtotal);
 		}
 		Integer idDoCupom = novoPedido.getIdCupom();
-		JSONObject requestCupom = new JSONObject();
-		requestCupom.put("idDoCupom", idDoCupom);
-		JSONObject cupomEncontrado = fromCupom.requestBody("direct:receberCupom", requestCupom, JSONObject.class);
-		Cupom cupom = new Cupom();
-		cupom.setId(cupomEncontrado.getInt("id"));
-		cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
-		cupom.setStatus(cupomEncontrado.getString("status"));
+		if (idDoCupom == 0 || idDoCupom == null) {
+			novoPedido.setCupom(null);
+		}else {
+			JSONObject requestCupom = new JSONObject();
+			requestCupom.put("idDoCupom", idDoCupom);
+			JSONObject cupomEncontrado = fromCupom.requestBody("direct:receberCupom", requestCupom, JSONObject.class);
+			Cupom cupom = new Cupom();
+			cupom.setId(cupomEncontrado.getInt("id"));
+			cupom.setValor(cupomEncontrado.getBigDecimal("percentualDeDesconto"));
+			cupom.setStatus(cupomEncontrado.getString("status"));
+			novoPedido.setCupom(cupom);
+		}
 		
-		Endereco enderecoClienteEncontrado = obterEndereco(novoPedido.getIdEndereco());
-		EnderecoRestaurante enderecoRestauranteEncontrado = obterEnderecoRestaurante(novoPedido.getIdRestaurante());
-		JSONObject requestValorFrete = new JSONObject();
-		
-		requestValorFrete.put("cepDeOrigem", enderecoRestauranteEncontrado.getCep());
-		requestValorFrete.put("cepDeDestino", enderecoClienteEncontrado.getCep());		
-		JSONObject valorFreteEncontrado = fromLogistica.requestBody("direct:receberValorFrete", requestValorFrete,
-				JSONObject.class);		
-		novoPedido.setValorFrete(valorFreteEncontrado.getBigDecimal("custo"));
-		
-
-		novoPedido.setCupom(cupom);
+		if (novoPedido.getRetirada().equals(Retirada.DELIVERY)) {
+			Endereco enderecoClienteEncontrado = obterEndereco(novoPedido.getIdEndereco());
+			EnderecoRestaurante enderecoRestauranteEncontrado = obterEnderecoRestaurante(novoPedido.getIdRestaurante());
+			JSONObject requestValorFrete = new JSONObject();		
+			requestValorFrete.put("cepDeOrigem", enderecoRestauranteEncontrado.getCep());
+			requestValorFrete.put("cepDeDestino", enderecoClienteEncontrado.getCep());		
+			JSONObject valorFreteEncontrado = new JSONObject();
+			try {
+				valorFreteEncontrado = fromLogistica.requestBody("direct:receberValorFrete", requestValorFrete,
+						JSONObject.class);
+			} catch (Exception e) {
+				throw new BusinessException("Não foi possível calcular o frete, confira se as informações do endereço foram inseridas corretamente."); 
+			}				
+			novoPedido.setValorFrete(valorFreteEncontrado.getBigDecimal("custo"));			
+		}else {
+			
+			novoPedido.setValorFrete(BigDecimal.ZERO);
+		}
 
 		return service.salvar(novoPedido);
 	}
@@ -181,20 +193,24 @@ public class PedidoServiceProxy implements PedidoService {
 		usuario.setEmail(usuarioJson.getString("email"));
 
 		return usuario;
+
 	}
 	
-
 	private Cupom buscarCupomPor(Integer id) {
-		JSONObject requestBodyCupom = new JSONObject();
-		requestBodyCupom.put("idDoCupom", id);
-		JSONObject cupomJson = fromCupom.requestBody("direct:receberCupom", requestBodyCupom, JSONObject.class);
-		Cupom cupom = new Cupom();
-		cupom.setId(cupomJson.getInt("id"));
-		cupom.setCodigo(cupomJson.getString("codigo"));
-		cupom.setStatus(cupomJson.getString("status"));
-		cupom.setValor(cupomJson.getBigDecimal("percentualDeDesconto"));
+		if (id != 0) {
 
-		return cupom;
+			JSONObject requestBodyCupom = new JSONObject();
+			requestBodyCupom.put("idDoCupom", id);
+			JSONObject cupomJson = fromCupom.requestBody("direct:receberCupom", requestBodyCupom, JSONObject.class);
+			Cupom cupom = new Cupom();
+			cupom.setId(cupomJson.getInt("id"));
+			cupom.setCodigo(cupomJson.getString("codigo"));
+			cupom.setStatus(cupomJson.getString("status"));
+			cupom.setValor(cupomJson.getBigDecimal("percentualDeDesconto"));
+			return cupom;
+		}
+		
+		return null;
 	}
 
 	private Endereco buscarEnderecoPor(Integer id) {

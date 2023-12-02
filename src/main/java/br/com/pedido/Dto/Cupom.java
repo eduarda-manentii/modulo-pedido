@@ -17,16 +17,13 @@ public class Cupom {
 	@Positive(message = "O id do cupom deve ser positivo")
 	private Integer id;
 	
-	@Size(max = 20, message = "A codigo do cupom não deve conter mais de 20 caracteries")
-	@NotBlank(message = "O codigo do cupom é obrigatório")
+	@Size(max = 20, message = "A codigo do cupom não deve conter mais de 20 caracteries")	
 	private String codigo;
 	
-	@NotBlank(message = "O status é obrigatório")
 	private String status;
 	
 	@DecimalMin(value = "0.0", inclusive = false, message = "O valor deve ser positivo")
-	@Digits(integer = 9, fraction = 2, message = "O valor de possuir o formato 'NNNNNNNNN.NN'")
-	@NotNull(message = "O valor do cupom é obrigatório")
+	@Digits(integer = 9, fraction = 2, message = "O valor de possuir o formato 'NNNNNNNNN.NN'")	
 	private BigDecimal valor;
 	
 }
