@@ -144,7 +144,8 @@ public class PedidoController {
 		pedidoMap.put("endereco", enderecoMap);
 		
 		Map<String, Object> cupomMap = new HashMap<String, Object>();
-		if (cupomMap != null && !cupomMap.isEmpty()) {
+		Integer idCupom = pedido.getIdCupom();
+		if (idCupom != 0 && idCupom != null) {
 			cupomMap.put("id_cupom", pedido.getCupom().getId());
 			cupomMap.put("codigo", pedido.getCupom().getCodigo());
 			cupomMap.put("valor", pedido.getCupom().getValor() + "%");
