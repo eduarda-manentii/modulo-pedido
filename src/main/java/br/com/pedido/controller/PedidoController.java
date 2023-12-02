@@ -140,10 +140,12 @@ public class PedidoController {
 		pedidoMap.put("endereco", enderecoMap);
 		
 		Map<String, Object> cupomMap = new HashMap<String, Object>();
-		cupomMap.put("id_cupom", pedido.getCupom().getId());
-		cupomMap.put("codigo", pedido.getCupom().getCodigo());
-		cupomMap.put("valor", pedido.getCupom().getValor() + "%");
-		pedidoMap.put("cupom", cupomMap);
+		if (cupomMap != null && !cupomMap.isEmpty()) {
+			cupomMap.put("id_cupom", pedido.getCupom().getId());
+			cupomMap.put("codigo", pedido.getCupom().getCodigo());
+			cupomMap.put("valor", pedido.getCupom().getValor() + "%");
+			pedidoMap.put("cupom", cupomMap);
+		}
 		
 		List<Map<String, Object>> opcoesMap = new ArrayList<Map<String, Object>>();
 		for (OpcaoDoPedido opcaoDoPedido : pedido.getOpcoes()) {

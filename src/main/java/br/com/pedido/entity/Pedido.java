@@ -65,7 +65,7 @@ public class Pedido {
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	
-	@DecimalMin(value = "0.0", inclusive = false, message = "O valor de desconto não pode ser inferior a 0.0")
+	@DecimalMin(value = "0.0", inclusive = true, message = "O valor de desconto não pode ser inferior a 0.0")
 	@Digits(integer = 9, fraction = 2, message = "O valor de desconto deve possuir o formato 'NNNNNNNNN.NN'")
 	@Column(name = "valor_desconto")
 	private BigDecimal valorDesconto;
@@ -75,7 +75,7 @@ public class Pedido {
 	@Column(name = "valor_itens")
 	private BigDecimal valorItens;
 	
-	@DecimalMin(value = "0.0", inclusive = false, message = "O valor do frete não pode ser inferior a 0.0")
+	@DecimalMin(value = "0.0", inclusive = true, message = "O valor do frete não pode ser inferior a 0.0")
 	@Digits(integer = 9, fraction = 1, message = "O valor de frete deve possuir o formato 'NNNNNNNNN.N'")
 	@Column(name = "valor_frete")
 	private BigDecimal valorFrete;

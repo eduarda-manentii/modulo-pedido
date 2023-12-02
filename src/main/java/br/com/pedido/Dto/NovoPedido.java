@@ -38,7 +38,7 @@ public class NovoPedido {
 	@Digits(integer = 9, fraction = 2, message = "O valor total deve possuir o formato 'NNNNNNNNN.NN'")
 	private BigDecimal valorTotal;
 	
-	@DecimalMin(value = "0.0", inclusive = false, message = "O valor de desconto não pode ser inferior a 0.0")
+	@DecimalMin(value = "0.0", inclusive = true, message = "O valor de desconto não pode ser inferior a 0.0")
 	@Digits(integer = 9, fraction = 2, message = "O valor de desconto deve possuir o formato 'NNNNNNNNN.NN'")
 	private BigDecimal valorDesconto;
 	
@@ -46,14 +46,13 @@ public class NovoPedido {
 	@Digits(integer = 9, fraction = 2, message = "O valor de desconto deve possuir o formato 'NNNNNNNNN.NN'")
 	private BigDecimal valorItens;
 	
-	@DecimalMin(value = "0.0", inclusive = false, message = "O valor do frete não pode ser inferior a 0.0")
+	@DecimalMin(value = "0.0", inclusive = true, message = "O valor do frete não pode ser inferior a 0.0")
 	@Digits(integer = 9, fraction = 1, message = "O valor de frete deve possuir o formato 'NNNNNNNNN.N'")
 	private BigDecimal valorFrete;
 	
 	@NotNull(message = "O cliente é obrigatório.")
 	private Integer idCliente;
-	
-	@NotNull(message = "O cupom é obrigatório.")
+		
 	private Integer idCupom;
 	
 	@Transient
