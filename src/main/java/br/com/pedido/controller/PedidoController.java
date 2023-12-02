@@ -183,7 +183,9 @@ public class PedidoController {
 		pedidoMap.put("opcoes", pedido.getOpcoes());
 		pedidoMap.put("id_cardapio", pedido.getIdCardapio());
 		pedidoMap.put("id_restaurante", pedido.getIdRestaurante());
-		pedidoMap.put("id_cupom", pedido.getIdCupom());
+		if (pedido.getCupom() != null) {
+			pedidoMap.put("id_cupom", pedido.getIdCupom());
+		}
 		pedidoMap.put("id_cliente", pedido.getIdCliente());
 		pedidoMap.put("id_endereco", pedido.getIdCliente());
 		pedidoMap.put("id_cardapio", pedido.getIdCardapio());
