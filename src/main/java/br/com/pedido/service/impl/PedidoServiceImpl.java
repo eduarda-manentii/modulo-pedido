@@ -40,25 +40,27 @@ public class PedidoServiceImpl implements PedidoService {
 	    pedido.setCupom(novoPedido.getCupom());
 	    pedido.setIdCardapio(novoPedido.getIdDoCardapio());
 	    
+
 	    BigDecimal frete = novoPedido.getValorFrete();
 	    BigDecimal freteArredondado = frete.setScale(1, RoundingMode.HALF_UP);
 	    pedido.setValorFrete(freteArredondado);
 	    
 	    BigDecimal valorItens = novoPedido.getValorItens();
-	    pedido.setValorItens(valorItens);
-	    BigDecimal subtotal = valorItens.add(freteArredondado);
 	    BigDecimal desconto = BigDecimal.ZERO;
-	    
+
 	    if (pedido.getIdCupom() != null && pedido.getIdCupom() != 0) {
-	    	BigDecimal porcentagemDesconto = pedido.getCupom().getValor();    	
-			desconto = (porcentagemDesconto.multiply(subtotal)).divide(new BigDecimal(100));
-			
-		}     
-	    
+	        BigDecimal porcentagemDesconto = pedido.getCupom().getValor();
+	        desconto = (porcentagemDesconto.multiply(valorItens)).divide(new BigDecimal(100));
+	    }
+
 	    pedido.setValorDesconto(desconto);
-	    subtotal = subtotal.subtract(desconto);
-	    pedido.setValorTotal(subtotal);
 	    
+	    BigDecimal valorItensComDesconto = valorItens.subtract(desconto);
+	    pedido.setValorItens(valorItensComDesconto);
+	    BigDecimal subtotal = valorItensComDesconto.add(freteArredondado);
+
+	    pedido.setValorTotal(subtotal);
+
 	    Pedido pedidoSalvo = repository.save(pedido);
 
 	    for (NovaOpcaoDoPedido novaOpcao : novoPedido.getOpcoes()) {
