@@ -61,14 +61,16 @@ public class PedidoController {
 			@RequestParam(name = "retirada") Optional<Retirada> retirada,
 			@RequestParam(name = "id-ultimo-pedido") Optional<Integer> idUltimoPedido,
 			@RequestParam(name = "pagina") Optional<Integer> pagina,
-			@RequestParam(name = "resumo") Optional<Integer> resumo) {
+			@RequestParam(name = "resumo") Optional<Integer> resumo,
+			@RequestParam(name = "id-cliente") Optional<Integer> idCliente) {
 		Pageable paginacao = null;
 		if (pagina.isPresent()) {
 			paginacao = PageRequest.of(pagina.get(), 15);
 		} else {
 			paginacao = PageRequest.of(0, 15);
 		}
-		Page<Pedido> page = service.listarPor(idDoRestaurante, status, retirada, resumo, idUltimoPedido, paginacao);;
+		Page<Pedido> page = service.listarPor(idDoRestaurante, status, retirada,
+				resumo, idUltimoPedido, idCliente, paginacao);;
 		Map<String, Object> pageMap = new HashMap<String, Object>();
 		pageMap.put("paginacaoAtual", page.getNumber());
 		pageMap.put("totalDeItens", page.getTotalElements());

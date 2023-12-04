@@ -135,8 +135,10 @@ public class PedidoServiceImpl implements PedidoService {
 	
 	@Override
 	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, 
-			Optional<Retirada> retirada, Optional<Integer> resumo, Optional<Integer> idUltimoPedido, Pageable paginacao) {
-		return repository.listarPor(idRestaurante, status, retirada, idUltimoPedido, paginacao);
+			Optional<Retirada> retirada, Optional<Integer> resumo, 
+			Optional<Integer> idUltimoPedido, Optional<Integer> idCliente, Pageable paginacao) {
+		return repository.listarPor(idRestaurante, status, retirada, 
+				idUltimoPedido, idCliente, paginacao);
 	}
 
 	@Override

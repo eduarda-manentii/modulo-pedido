@@ -28,14 +28,18 @@ public interface PedidosRepository extends JpaRepository<Pedido, Integer> {
 			+ "AND p.status = :status "
 			+ "AND (:retirada IS NULL OR p.retirada = :retirada) "
 			+ "AND (:idUltimoPedido IS NULL OR p.id > :idUltimoPedido) "
+			+ "AND (:idCliente IS NULL OR p.idCliente = :idCliente) "
 			+ "ORDER BY p.data ",			
 			countQuery = "SELECT Count(p) "
 						+ "FROM Pedido p "
 						+ "WHERE (:idRestaurante IS NULL OR p.idRestaurante = :idRestaurante) " 
 						+ "AND p.status = :status "
 						+ "AND (:retirada IS NULL OR p.retirada = :retirada) "
-						+ "AND (:idUltimoPedido IS NULL OR p.id > :idUltimoPedido)")
-		public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, Optional<Retirada> retirada, Optional<Integer> idUltimoPedido, Pageable paginacao);
+						+ "AND (:idUltimoPedido IS NULL OR p.id > :idUltimoPedido)"
+						+ "AND (:idCliente IS NULL OR p.idCliente = :idCliente) ")
+		public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, 
+				Optional<Retirada> retirada, Optional<Integer> idUltimoPedido, 
+				Optional<Integer> idCliente, Pageable paginacao);
 		
 	@Query("SELECT p "
 			+ "FROM Pedido p "

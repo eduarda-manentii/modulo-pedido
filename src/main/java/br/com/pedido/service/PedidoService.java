@@ -34,6 +34,7 @@ public interface PedidoService {
 			Optional<Retirada> retirada,
 			Optional<Integer> resumo,
 			Optional<Integer> idUltimoPedido,
+			Optional<Integer> idCliente,
 			Pageable paginacao);
 	
 	public Pedido buscarPor(

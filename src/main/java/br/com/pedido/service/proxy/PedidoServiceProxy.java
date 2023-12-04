@@ -120,8 +120,10 @@ public class PedidoServiceProxy implements PedidoService {
 
 	@Override
 	public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status,
-	        Optional<Retirada> retirada, Optional<Integer> resumo, Optional<Integer> idUltimoPedido, Pageable paginacao) {
-	    Page<Pedido> pagina = service.listarPor(idRestaurante, status, retirada, resumo, idUltimoPedido, paginacao);
+	        Optional<Retirada> retirada, Optional<Integer> resumo,
+	        Optional<Integer> idUltimoPedido,  Optional<Integer> idCliente, Pageable paginacao) {
+	    Page<Pedido> pagina = service.listarPor(idRestaurante, status,
+	    		retirada, resumo, idUltimoPedido, idCliente, paginacao);
 	    if (resumo.isEmpty() || resumo.get() == 0) {
 	        for (Pedido pedido : pagina.getContent()) {
 	            carregarInformacoesExtras(pedido);
