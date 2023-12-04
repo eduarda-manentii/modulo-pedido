@@ -229,7 +229,11 @@ public class PedidoServiceProxy implements PedidoService {
 		endereco.setCidade(enderecoJson.getString("cidade"));
 		endereco.setEstado(enderecoJson.getString("estado"));
 		endereco.setNumero(enderecoJson.getString("numeroDaCasa"));
-		endereco.setComplemento(enderecoJson.getString("complemento"));
+		if (enderecoJson.has("complemento") && !enderecoJson.isNull("complemento")) {
+            endereco.setComplemento(enderecoJson.getString("complemento"));
+        } else {
+            endereco.setComplemento(null);       
+        }
 
 		return endereco;
 	}
