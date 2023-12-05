@@ -1,5 +1,7 @@
 package br.com.pedido.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -150,7 +152,8 @@ public class PedidoController {
 		if (idCupom != 0 && idCupom != null) {
 			cupomMap.put("id_cupom", pedido.getCupom().getId());
 			cupomMap.put("codigo", pedido.getCupom().getCodigo());
-			cupomMap.put("valor", pedido.getCupom().getValor() + "%");
+			BigDecimal valorCupom = pedido.getCupom().getValor().setScale(2, RoundingMode.HALF_UP);
+			cupomMap.put("valor", valorCupom + "%");
 			pedidoMap.put("cupom", cupomMap);
 		}
 		
