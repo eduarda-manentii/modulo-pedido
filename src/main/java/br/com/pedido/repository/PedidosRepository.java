@@ -35,7 +35,7 @@ public interface PedidosRepository extends JpaRepository<Pedido, Integer> {
 						+ "WHERE (:idRestaurante IS NULL OR p.idRestaurante = :idRestaurante) " 
 						+ "AND p.status = :status "
 						+ "AND (:retirada IS NULL OR p.retirada = :retirada) "
-						+ "AND (:idUltimoPedido IS NULL OR p.id > :idUltimoPedido)"
+						+ "AND (:idUltimoPedido IS NULL OR p.id > :idUltimoPedido) "
 						+ "AND (:idCliente IS NULL OR p.idCliente = :idCliente) ")
 		public Page<Pedido> listarPor(Optional<Integer> idRestaurante, Status status, 
 				Optional<Retirada> retirada, Optional<Integer> idUltimoPedido, 
