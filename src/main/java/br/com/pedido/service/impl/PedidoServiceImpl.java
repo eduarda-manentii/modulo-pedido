@@ -49,9 +49,10 @@ public class PedidoServiceImpl implements PedidoService {
 
 	    if (pedido.getIdCupom() != null && pedido.getIdCupom() != 0) {
 	        BigDecimal porcentagemDesconto = pedido.getCupom().getValor();
-	        desconto = (porcentagemDesconto.multiply(valorItens)).divide(new BigDecimal(100));
+	        desconto = (porcentagemDesconto.multiply(valorItens)).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP);
 	    }
-
+	    
+	    
 	    pedido.setValorDesconto(desconto);
 	    
 	    BigDecimal valorItensComDesconto = valorItens.subtract(desconto);
