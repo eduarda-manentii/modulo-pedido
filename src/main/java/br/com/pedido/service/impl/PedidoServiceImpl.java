@@ -44,7 +44,7 @@ public class PedidoServiceImpl implements PedidoService {
 	    BigDecimal freteArredondado = frete.setScale(1, RoundingMode.HALF_UP);
 	    pedido.setValorFrete(freteArredondado);
 	    
-	    BigDecimal valorItens = novoPedido.getValorItens();
+	    BigDecimal valorItens = novoPedido.getValorItens().setScale(2, RoundingMode.HALF_UP);
 	    BigDecimal desconto = BigDecimal.ZERO;
 
 	    if (pedido.getIdCupom() != null && pedido.getIdCupom() != 0) {
